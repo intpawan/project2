@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="entity.TileTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:52" hostname="DESKTOP-4AHVI7A" time="0.072">
+  <properties/>
+  <testcase name="testGetTasks()" classname="entity.TileTest" time="0.005"/>
+  <testcase name="testGetId()" classname="entity.TileTest" time="0.002"/>
+  <testcase name="testGetCost()" classname="entity.TileTest" time="0.017"/>
+  <testcase name="testGetType()" classname="entity.TileTest" time="0.003"/>
+  <testcase name="testTileClone()" classname="entity.TileTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

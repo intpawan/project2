@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="entity.CostTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:49" hostname="DESKTOP-4AHVI7A" time="0.429">
+  <properties/>
+  <testcase name="testToString()" classname="entity.CostTest" time="0.429"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

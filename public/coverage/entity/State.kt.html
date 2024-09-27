@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>State.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">entity</a> &gt; <span class="el_source">State.kt</span></div><h1>State.kt</h1><pre class="source lang-java linenums">package entity
+
+import kotlinx.serialization.Serializable
+
+/**
+ * class to save the actual state
+ * @property [stack] which is the list of usable tiles
+ * @property [moonwheel] which is the actual state of the moonwheel
+ * @property [currentPlayer] which is a pointer to the actual player
+ * @property [players] which is a list of players in the games
+ * @property [protocol] which is one line of the protocol for the ai tournament
+ *
+ */
+<span class="pc bpc" id="L14" title="2 of 11 branches missed.">@Serializable</span>
+<span class="fc" id="L15">data class State (var stack : MutableList&lt;Tile&gt;,</span>
+<span class="fc" id="L16">             var moonwheel: Moonwheel,</span>
+<span class="fc" id="L17">             var currentPlayer: Player,</span>
+<span class="fc" id="L18">             var players: MutableList&lt;Player&gt;,</span>
+<span class="fc" id="L19">             var protocol : String</span>
+             ) {
+    /**
+     * function to clone a game state
+     */
+   fun clone() : State{
+<span class="fc" id="L25">        val newStack : MutableList&lt;Tile&gt; = this.stack.map{ it -&gt; it.clone()}.toMutableList()</span>
+<span class="fc" id="L26">        val newPlayers : MutableList&lt;Player&gt; = this.players.map{ it -&gt; it.clone()}.toMutableList()</span>
+<span class="fc" id="L27">        val newCurrentPlayer = newPlayers[players.indexOf(currentPlayer)]</span>
+<span class="fc" id="L28">        return State(newStack, this.moonwheel.clone(), newCurrentPlayer, newPlayers, protocol)</span>
+    }
+<span class="fc" id="L30">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

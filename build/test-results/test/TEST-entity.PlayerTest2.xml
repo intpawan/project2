@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="entity.PlayerTest2" tests="10" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:50" hostname="DESKTOP-4AHVI7A" time="0.791">
+  <properties/>
+  <testcase name="isEligibleGridPositionCaseOne()" classname="entity.PlayerTest2" time="0.519"/>
+  <testcase name="isEligibleGridPositionCaseTwo()" classname="entity.PlayerTest2" time="0.073"/>
+  <testcase name="placeTileOnGridCaseOne()" classname="entity.PlayerTest2" time="0.083"/>
+  <testcase name="placeTileOnGridCaseTwo()" classname="entity.PlayerTest2" time="0.023"/>
+  <testcase name="getNeighboursCaseTwo()" classname="entity.PlayerTest2" time="0.013"/>
+  <testcase name="getNeighbours()" classname="entity.PlayerTest2" time="0.009"/>
+  <testcase name="isPositionOnlyCase()" classname="entity.PlayerTest2" time="0.006"/>
+  <testcase name="placeTileOnGridCaseThree()" classname="entity.PlayerTest2" time="0.003"/>
+  <testcase name="areNeighboursCaseOne()" classname="entity.PlayerTest2" time="0.013"/>
+  <testcase name="areNeighboursCaseTwo()" classname="entity.PlayerTest2" time="0.01"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

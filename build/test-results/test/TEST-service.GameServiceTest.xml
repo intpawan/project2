@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.GameServiceTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:21:08" hostname="DESKTOP-4AHVI7A" time="0.277">
+  <properties/>
+  <testcase name="startNewAITournamentOnlyCase()" classname="service.GameServiceTest" time="0.01"/>
+  <testcase name="endGameConditionReachedCaseOne()" classname="service.GameServiceTest" time="0.008"/>
+  <testcase name="endGameConditionReachedCaseTwo()" classname="service.GameServiceTest" time="0.009"/>
+  <testcase name="endGameConditionReachedCaseThree()" classname="service.GameServiceTest" time="0.033"/>
+  <testcase name="startNewFirstGameOnlyCase()" classname="service.GameServiceTest" time="0.13"/>
+  <testcase name="startNewGameCaseOne()" classname="service.GameServiceTest" time="0.016"/>
+  <testcase name="startNewGameCaseTwo()" classname="service.GameServiceTest" time="0.017"/>
+  <testcase name="startNewAISimulationGameCaseOne()" classname="service.GameServiceTest" time="0.007"/>
+  <testcase name="startNewAISimulationGameCaseTwo()" classname="service.GameServiceTest" time="0.002"/>
+  <testcase name="startNewGameCaseThree()" classname="service.GameServiceTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayerActionService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">service</a> &gt; <span class="el_source">PlayerActionService.kt</span></div><h1>PlayerActionService.kt</h1><pre class="source lang-java linenums">package service
+
+import entity.*
+
+/**
+ * Service layer class that provides the logic for actions related to the single player
+ *
+ * @property rootService Instance of [RootService] to access the other service layer classes and the entity layer.
+ */
+<span class="fc" id="L10">class PlayerActionService(val rootService: RootService): AbstractRefreshingService() {</span>
+
+
+    /**
+     * Refills the tiles of the moonwheel starting at the meeple if there are
+     * tiles left on the stack.
+     *
+     * This method works directly on the currently active game. It calls [refillTiles] with the current state as
+     * argument, which does the actual refilling.
+     * refilling on the current [State] which is passed as an argument.
+     *
+     * NOTE: Do not use outside the service-layer. Outside the service layer please use the other [refillTiles]-method
+     * with the [State]-argument.
+     *
+     * @exception IllegalStateException There is no currently active game.
+     * @exception IllegalArgumentException if the moonwheel does not have a meeple
+     */
+    fun refillTiles(){
+<span class="fc" id="L28">        val currentGame : Game? = rootService.novaluna.game</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        checkNotNull(currentGame){ &quot;There is no currently active game.&quot;}</span>
+<span class="fc" id="L30">        refillTiles(currentGame.currentState)</span>
+        //onAllRefreshables { refreshAfterRefillTiles() }
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * Refills the tiles of the moonwheel starting at the meeple if there are
+     * tiles left on the stack.
+     *
+     * This method works on the [State] [currentState] and manipulates it directly.
+     *
+     * @param currentState The state in which the [Moonwheel] should be refilled.
+     * @exception IllegalArgumentException if the moonwheel does not have a meeple
+     */
+    fun refillTiles(currentState: State){
+<span class="fc" id="L44">        val moonwheel : Moonwheel = currentState.moonwheel</span>
+
+<span class="fc" id="L46">        val meeple = Tile(Type.MEEPLE, Cost.ZERO, mutableListOf&lt;Task&gt;(), 69)</span>
+<span class="fc" id="L47">        val posMeeple : Int = moonwheel.tiles.indexOf(meeple)</span>
+<span class="fc bfc" id="L48" title="All 4 branches covered.">        require(posMeeple != -1){ &quot;Meeple does not exist on Moonwheel&quot;}</span>
+
+<span class="fc" id="L50">        val stack : MutableList&lt;Tile&gt; = currentState.stack</span>
+<span class="pc bpc" id="L51" title="1 of 4 branches missed.">        for(i in (posMeeple+1)..(11+posMeeple)){</span>
+<span class="fc" id="L52">            val currentTile = moonwheel.tiles[i % 12]</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">            if(currentTile == Tile() &amp;&amp; stack.size != 0){</span>
+<span class="fc" id="L54">                moonwheel.tiles[i % 12] = stack[0]</span>
+<span class="fc" id="L55">                stack.removeFirst()</span>
+            }
+        }
+
+<span class="fc" id="L59">        onAllRefreshables { refreshAfterRefillTiles() }</span>
+<span class="fc" id="L60">    }</span>
+
+
+    /**
+     * Undoes the move of the current player by setting the current state to the previous state
+     * only if he is same the current player of the previous state.
+     *
+     * 'choseUndo' of the currentGame is set to true.
+     *
+     * @exception IllegalStateException There is no currently active game.
+     * @exception IllegalArgumentException
+     *    if current player of current state is not the same in the previous state
+     * @exception IllegalArgumentException if current state is already the oldest state
+     */
+    fun undo(){
+<span class="fc" id="L75">        val currentGame : Game? = rootService.novaluna.game</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        checkNotNull(currentGame){ &quot;There is no currently active game.&quot;}</span>
+<span class="fc" id="L77">        val currentPlayer = currentGame.currentState.currentPlayer</span>
+<span class="fc" id="L78">        val indexCurrentState = currentGame.states.indexOf(currentGame.currentState)</span>
+<span class="fc bfc" id="L79" title="All 4 branches covered.">        require(indexCurrentState != 0){</span>
+<span class="fc" id="L80">            &quot;Cannot perform 'undo'. Current state is already the oldest state&quot;</span>
+        }
+<span class="fc" id="L82">        val previousState = currentGame.states[indexCurrentState-1]</span>
+<span class="fc" id="L83">        val previousPlayer : Player = previousState.currentPlayer</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        require(currentPlayer == previousPlayer){</span>
+<span class="nc" id="L85">            &quot;Cannot perform 'undo'. Player of the previous state is not equal&quot; +</span>
+            &quot;to the player of the current&quot;
+        }
+<span class="fc" id="L88">        currentGame.choseUndo = true</span>
+<span class="fc" id="L89">        currentGame.currentState = previousState</span>
+<span class="fc" id="L90">        onAllRefreshables { refreshAfterUndo() }</span>
+<span class="fc" id="L91">    }</span>
+
+
+    /**
+     * Redoes the move the current player by setting the current state to the next state
+     * when undo has been used before. Only possible if the current state is not the last state.
+     *
+     * @exception IllegalStateException There is no currently active game.
+     * @exception IllegalArgumentException if current player of current state is not the same
+     * in the next state
+     * @exception IllegalArgumentException if current state is already the newest state
+     */
+    fun redo() {
+<span class="fc" id="L104">        val currentGame : Game? = rootService.novaluna.game</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        checkNotNull(currentGame){ &quot;There is no currently active game.&quot;}</span>
+<span class="fc" id="L106">        val currentPlayer = currentGame.currentState.currentPlayer</span>
+<span class="fc" id="L107">        val indexCurrentState = currentGame.states.indexOf(currentGame.currentState)</span>
+<span class="fc bfc" id="L108" title="All 4 branches covered.">        require(indexCurrentState != (currentGame.states.size-1)){</span>
+<span class="fc" id="L109">            &quot;Cannot perform 'redo'. Current state is already the newest state&quot;</span>
+        }
+<span class="fc" id="L111">        val nextState = currentGame.states[indexCurrentState+1]</span>
+<span class="fc" id="L112">        val nextPlayer : Player = nextState.currentPlayer</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        require(currentPlayer == nextPlayer){</span>
+<span class="fc" id="L114">            &quot;Cannot perform 'redo'. Player of the next state is not equal to the player of the current&quot;</span>
+        }
+<span class="fc" id="L116">        currentGame.currentState = nextState</span>
+<span class="fc" id="L117">        onAllRefreshables { refreshAfterRedo() }</span>
+<span class="fc" id="L118">    }</span>
+
+
+    /**
+     * Manipulates [currentState] according to the following move: Place [chosenTile] on the grid position [pos] on the
+     * current [Player]'s grid.
+     *
+     * It is checked whether the tile selection was allowed and whether [pos] is eligible. If one of the checks fails,
+     * an exception is thrown.
+     *
+     * Then, the player position and the tile on the moonwheel are updated, the player's grid is updated and finally his
+     * tokens are placed. The player's actions are protocolled.
+     *
+     * Note again that this is done directly on [currentState]. The [State] passed as an argument is altered in this
+     * method.
+     *
+     * @param chosenTile The [Tile] chosen by the player.
+     * @param pos The grid position where the player wants to place the tile.
+     * @param currentState The [State] to be manipulated in the above specified way.
+     * @exception IllegalStateException The [Moonwheel] is not consistent, either because the chosenTile is not exactly
+     * once on the moonwheel or because the meeple is not exactly once on the moonwheel.
+     * @exception IllegalStateException The players on the moonwheel are not consistent.
+     * @exception IllegalArgumentException [pos] is not an eligible grid position.
+     * @exception IllegalArgumentException [chosenTile] is not eligible for placement in the grid, either because it is
+     * not a coloured tile or because it is not in the range of selectable tiles.
+     */
+    fun manipulateStateMakeMove(chosenTile: Tile, pos: Pair&lt;Int, Int&gt;, currentState: State){
+        // Check pos and chosenTile for consistency:
+        // Checks that pos is an eligible grid position for the current player.
+        // tileSelectionAllowed checks for the consistency of chosenTile, the moonwheel at large and the selection.
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        require(currentState.currentPlayer.isEligibleGridPosition(pos)) {</span>
+<span class="nc" id="L149">            &quot;pos is not an eligible position.&quot;</span>
+        }
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        require(tileSelectionAllowed(chosenTile,currentState)) {&quot;The tile selection was not allowed.&quot;}</span>
+
+        // Update the player position and the tiles on the moonwheel.
+<span class="fc" id="L154">        updateMoonwheelTiles(chosenTile,currentState)</span>
+<span class="fc" id="L155">        updatePlayerPosition(chosenTile,currentState)</span>
+
+        // Place the tile on the grid and place the tokens.
+<span class="fc" id="L158">        currentState.currentPlayer.placeTileOnGrid(chosenTile,pos)</span>
+<span class="fc" id="L159">        val taskProtocol = placeTokens(currentState)</span>
+
+        // Protocol the move
+<span class="fc" id="L162">        protocolMove(chosenTile,pos,taskProtocol,currentState)</span>
+<span class="fc" id="L163">    }</span>
+
+    /**
+     * Method that implements the move of the current player given his selected tile and the position he wants to place
+     * it.
+     *
+     * It is checked whether the tile selection was allowed and whether [pos] is eligible.
+     * If so, the current state is cloned. All subsequent changes are performed on this clone.
+     *
+     * Then, the player position and the tile on the moonwheel are updated, the player's grid is updated and finally his
+     * tokens are placed. The player's actions are protocolled.
+     * All this is done not directly in makeMove but through the method [manipulateStateMakeMove].
+     *
+     * Note that this method does call neither endMove nor endGame, because the player should be able to end his move
+     * separately, so that he can see and evaluate the result of his move.
+     * Thus, the currentPlayer is not changed in this method.
+     *
+     * @param chosenTile The [Tile] chosen by the player.
+     * @param pos The grid position where the player wants to place the tile.
+     * @exception IllegalStateException There is no currently active game.
+     * @exception IllegalStateException The [Moonwheel] is not consistent, either because the chosenTile is not exactly
+     * once on the moonwheel or because the meeple is not exactly once on the moonwheel.
+     * @exception IllegalStateException The players on the moonwheel are not consistent.
+     * @exception IllegalArgumentException [pos] is not an eligible grid position.
+     * @exception IllegalArgumentException [chosenTile] is not eligible for placement in the grid, either because it is
+     * not a coloured tile or because it is not in the range of selectable tiles.
+     */
+    fun makeMove(chosenTile: Tile, pos: Pair&lt;Int, Int&gt;){
+        // Get current game and check if it exists. Do not get the current player, because the state is cloned later.
+<span class="fc" id="L192">        val currentGame = rootService.novaluna.game</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        checkNotNull(currentGame){ &quot;There is no currently active game.&quot;}</span>
+
+        // This is also done in manipulateState, but still it should be done here before anything is cloned, otherwise
+        // the states are altered despite the move being not allowed.
+        // Check pos and chosenTile for consistency:
+        // Checks that pos is an eligible grid position for the current player.
+        // tileSelectionAllowed checks for the consistency of chosenTile, the moonwheel at large and the selection.
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        require(currentGame.currentState.currentPlayer.isEligibleGridPosition(pos)) {</span>
+<span class="fc" id="L201">            &quot;pos is not an eligible position.&quot;</span>
+        }
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        require(tileSelectionAllowed(chosenTile,currentGame.currentState)) {&quot;The tile selection was not allowed.&quot;}</span>
+
+        // Clone the state so that the changes are done on the new state.
+<span class="fc" id="L206">        cloneUpdateState()</span>
+
+<span class="fc" id="L208">        manipulateStateMakeMove(chosenTile,pos,currentGame.currentState)</span>
+
+<span class="fc" id="L210">        onAllRefreshables { refreshAfterMakeMove() }</span>
+<span class="fc" id="L211">    }</span>
+
+    /**
+     * Simulates the placing of tokens on completed tasks. Operates on the [State] [currentState].
+     *
+     * It checks for every non-empty [Tile] on the player's grid, whether its tasks are completed.
+     * If a task is found which is completed but not yet marked as completed, it is marked as completed and the number
+     * of tokens of the player are reduced by 1.
+     *
+     * If all tokens are placed, meaning that the number of tokens is 0, no further checks for completed tasks are
+     * performed (because they can not be marked with tokens anyway and are irrelevant anyway, because the game is
+     * already won). Thus, in this case the number of tokens is 0 and some completed tasks are potentially not marked
+     * as completed.
+     */
+    private fun placeTokens(currentState: State): List&lt;Triple&lt;Pair&lt;Int,Int&gt;,Int,Task&gt;&gt;{
+        // Get current player.
+<span class="fc" id="L227">        val currentPlayer = currentState.currentPlayer</span>
+
+        // Initialize the list tasks that tokens were placed upon.
+<span class="fc" id="L230">        val taskProtocol = mutableListOf&lt;Triple&lt;Pair&lt;Int,Int&gt;,Int,Task&gt;&gt;()</span>
+
+        // For each tile in the grid look at each task.
+        // If the player still has tokens and the task is not yet marked as completed:
+        // If it is completed in the grid, mark it as completed and reduce the number of tokens by 1.
+<span class="fc" id="L235">        currentPlayer.grid.forEachIndexed { x, array -&gt;</span>
+<span class="fc" id="L236">            array.forEachIndexed { y, tile -&gt;</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                if(Type.shortType().contains(tile.type)){</span>
+<span class="fc" id="L238">                    tile.tasks.forEachIndexed { taskIndex,task -&gt;</span>
+<span class="fc bfc" id="L239" title="All 4 branches covered.">                        if(currentPlayer.tokens &gt; 0 &amp;&amp; !task.completed){</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                            if(checkTaskForCompletion(task,Pair(x,y),currentState)){</span>
+<span class="fc" id="L241">                                task.completed = true</span>
+<span class="fc" id="L242">                                currentPlayer.tokens--</span>
+<span class="fc" id="L243">                                taskProtocol.add(Triple(Pair(x,y),taskIndex,task))</span>
+                            }
+                        }
+<span class="fc" id="L246">                    }</span>
+                }
+<span class="fc" id="L248">            }</span>
+<span class="fc" id="L249">        }</span>
+<span class="fc" id="L250">        return taskProtocol</span>
+    }
+
+    /**
+     * Helper-method for [placeTokens].
+     *
+     * Check for a given task, which is contained in the tile at grid position pos, is completed.
+     *
+     * The task is not allowed to be already completed, otherwise an exception is thrown.
+     *
+     * The check is performed on the [State] [currentState].
+     *
+     * @param task The [Task] for which the completion is checked.
+     * @param pos The grid position of the [Tile] belonging to the task.
+     * @param currentState The [State] on which the check is performed.
+     * @return True if task is (newly) completed, false if it is not completed.
+     * @exception IllegalArgumentException [pos] is not a position.
+     * @exception IllegalArgumentException [task] is already completed.
+     * @exception IllegalArgumentException [task]  is not contained in the tile at [pos]
+     * @exception IllegalStateException Errors in the clusters are found.
+     */
+    private fun checkTaskForCompletion(task: Task,  pos: Pair&lt;Int,Int&gt;, currentState: State): Boolean{
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        require(Player.isPosition(pos)) {&quot;pos is not a position, values are instead: (${pos.first},${pos.second}.&quot;}</span>
+<span class="pc bpc" id="L273" title="2 of 4 branches missed.">        require(!task.completed) {&quot;task is already completed.&quot;}</span>
+
+        // Get current game and check if it exists. Then get currentPlayer. Then get the tile at pos.
+<span class="fc" id="L276">        val currentPlayer = currentState.currentPlayer</span>
+<span class="fc" id="L277">        val originTile = currentPlayer.grid[pos.first][pos.second]</span>
+
+        // Check if the originTile contains the task.
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">        require(originTile.tasks.contains(task)) {&quot;task not contained in the tile at the position pos in the grid.&quot;}</span>
+
+        // Get the type of the originTile. Check that it is a colour.
+<span class="fc" id="L283">        val originType = originTile.type</span>
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">        require(Type.shortType().contains(originType)) {</span>
+<span class="nc" id="L285">            &quot;tile at position pos in the grid is not of a colour, but instead: $originType&quot;</span>
+        }
+
+        // Get the colours in task without duplicates, so a list of the occurring colours.
+<span class="fc" id="L289">        val taskColours = task.colours.distinct()</span>
+
+        // Associate each colour in task with the number of times it is required by task.
+<span class="fc" id="L292">        val colourCountTask = taskColours.associateWith { colour -&gt;</span>
+<span class="fc" id="L293">            task.colours.count {</span>
+<span class="pc bpc" id="L294" title="1 of 6 branches missed.">                it == colour</span>
+            }
+        }
+        // Associate each colour in task with the cardinality of neighbouring clusters to originTile
+<span class="fc" id="L298">        val colourCountClusters = taskColours.associateWith { colour -&gt;</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">            if( colour == originType ){</span>
+                /* If the given colour is equal to originType, the only relevant cluster is the cluster containing the
+                originTile. Because originTile is not counted, the value is reduced by one.*/
+<span class="pc bpc" id="L302" title="1 of 4 branches missed.">                val relevantCluster = currentPlayer.clusters.find {</span>
+<span class="fc" id="L303">                    it.second.contains(pos)</span>
+                }
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">                checkNotNull(relevantCluster) {&quot;Error: No colour found containing pos.&quot;}</span>
+<span class="pc bpc" id="L306" title="2 of 4 branches missed.">                check(relevantCluster.second.isNotEmpty()) {&quot;Error: Empty cluster found.&quot;}</span>
+<span class="fc" id="L307">                relevantCluster.second.size - 1</span>
+            }else{
+                /*
+                A cluster is relevant if it has the specified colour and if it contains at least one element that is
+                a neighbour of pos. The total cardinality is then the sum of the cardinality of all relevant clusters.
+                 */
+<span class="fc" id="L313">                currentPlayer.clusters.filter { clusterPair -&gt;</span>
+<span class="fc bfc" id="L314" title="All 4 branches covered.">                    clusterPair.first == colour &amp;&amp; clusterPair.second.any {</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">                        it in Player.getNeighbours(pos)</span>
+                    }
+<span class="fc bfc" id="L317" title="All 2 branches covered.">                }.sumOf {</span>
+<span class="fc" id="L318">                    it.second.size</span>
+                }
+            }
+        }
+
+        // Check if for each colour in task the neighbouring cluster cardinality is &gt;= than the number required by task.
+<span class="fc" id="L324">        return colourCountTask.all {</span>
+<span class="pc bpc" id="L325" title="1 of 6 branches missed.">            it.value &lt;= (colourCountClusters[it.key] ?: throw IllegalStateException())</span>
+        }
+    }
+
+    /**
+     * Update the position of the currentPlayer according to the chosen tile.
+     *
+     * The current player is removed from his current position and added to the new position.
+     *
+     * The method checks also whether the currentPlayer is contained exactly once on the playing track and that at his
+     * position he is indeed the first player.
+     *
+     * The method performs all the updates on the [State] [currentState].
+     *
+     * @param chosenTile The [Tile] chosen by the current player which determines the new position.
+     * @param currentState The [State] on which the the update is done.
+     */
+    private fun updatePlayerPosition(chosenTile: Tile, currentState: State){
+        // Check that the chosen tile has a colour (so not empty or meeple).
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">        require(Type.shortType().contains(chosenTile.type)) {</span>
+<span class="nc" id="L345">            &quot;chosenTile is not of a colour, but is instead of type ${chosenTile.type}&quot;</span>
+        }
+
+        // Get the currentGame, the current player and the moonwheel.
+<span class="fc" id="L349">        val currentPlayer = currentState.currentPlayer</span>
+<span class="fc" id="L350">        val moonwheel = currentState.moonwheel</span>
+
+        // Get all the occurrences of currentPlayer. Check that he occurres only once and that he's the first player
+        // in his list.
+<span class="fc" id="L354">        val currentPlayerOccurences = moonwheel.playerPositions.filter { playerList -&gt;</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">            playerList.contains(currentPlayer)</span>
+        }
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">        check(</span>
+<span class="pc bpc" id="L358" title="3 of 8 branches missed.">            currentPlayerOccurences.size == 1 &amp;&amp; currentPlayerOccurences[0].count { it == currentPlayer } == 1</span>
+<span class="nc" id="L359">        ) { &quot;Error: currentPlayer occurres more than once on the wheel.&quot; }</span>
+<span class="fc bfc" id="L360" title="All 4 branches covered.">        check(currentPlayerOccurences[0].indexOf(currentPlayer) == 0) {</span>
+<span class="fc" id="L361">            &quot;Error: currentPlayer not the first player in the position list of the moonwheel.&quot;</span>
+        }
+
+        // Calculate the new position.
+<span class="fc" id="L365">        val newPosition =</span>
+<span class="fc" id="L366">            (moonwheel.playerPositions.indexOf(currentPlayerOccurences[0]) + chosenTile.cost.toString().toInt()) % 24</span>
+
+        // Remove the current player from his old position
+<span class="fc" id="L369">        currentPlayerOccurences[0].remove(currentPlayer)</span>
+
+        // Add player to the positionList at the new position.
+<span class="fc" id="L372">        moonwheel.playerPositions[newPosition] =</span>
+<span class="fc" id="L373">            (mutableListOf(currentPlayer) + moonwheel.playerPositions[newPosition]).toMutableList()</span>
+<span class="fc" id="L374">    }</span>
+
+    /**
+     * Checks whether the selection of [chosenTile] was allowed in the state [currentState]
+     *
+     * This method provides further consistency checks regarding [chosenTile] and the [Moonwheel].
+     * It is checked whether [chosenTile] is of a colour and whether it occurs exactly once on the Moonwheel.
+     * It checks whether exactly on meeple occurs on the Moonwheel.
+     * Finally it checks whether the positions of [chosenTile] and the meeple are so that [chosenTile] was allowed
+     * to be selected.
+     *
+     * Also checks whether [chosenTile] and the Meelple occurre exactly once on the moonwheel.
+     *
+     * All these checks are done for the [State] [currentState].
+     *
+     * @param chosenTile [Tile] for which selection eligibility is checked.
+     * @param currentState [State] on which check is performed.
+     * @return true if [chosenTile] is selectable, false else.
+     * @exception IllegalArgumentException [chosenTile] is not a coloured tile.
+     * @exception IllegalStateException [chosenTile] not exactly once on moonwheel.
+     * @exception IllegalStateException Moonmeeple not exactly once on moonwheel.
+     */
+    fun tileSelectionAllowed(chosenTile: Tile, currentState: State): Boolean{
+        // Check that the chosen tile has a colour (so not empty or meeple).
+<span class="fc bfc" id="L398" title="All 2 branches covered.">        require(Type.shortType().contains(chosenTile.type)) {</span>
+<span class="fc" id="L399">            &quot;chosenTile is not of a colour, but is instead of type ${chosenTile.type}&quot;</span>
+        }
+
+        // Get the moonwheel tiles.
+<span class="fc" id="L403">        val moonwheelTiles = currentState.moonwheel.tiles</span>
+
+        // Check that both the meeple and the chosen tile occur exactly once on the moonwheel
+<span class="fc bfc" id="L406" title="All 6 branches covered.">        check(moonwheelTiles.count { it == chosenTile } == 1) {&quot;chosenTile not exactly once on moonwheel.&quot;}</span>
+<span class="fc bfc" id="L407" title="All 8 branches covered.">        check(moonwheelTiles.count { it.type == Type.MEEPLE } == 1) {&quot;Moonmeeple not exactly once on moonwheel.&quot;}</span>
+
+        // Get the position of the chosenTile and the meeple.
+        // Because of the above checks, they are both exactly once on the moonwheel.
+<span class="fc" id="L411">        val chosenTilePosition = moonwheelTiles.indexOf(chosenTile)</span>
+<span class="fc bfc" id="L412" title="All 4 branches covered.">        val meeplePosition = moonwheelTiles.indexOf(moonwheelTiles.first { it.type == Type.MEEPLE })</span>
+
+        // THIS IS THE OLD STUFF, WHICH WAS WRONG
+        // Check whether the tile selection was allowed. This is the case if the chosen tile is on one of the next three
+        // position from the meeple.
+        /*return chosenTilePosition in setOf(
+            (meeplePosition + 1) % 12, (meeplePosition + 2) % 12, (meeplePosition + 3) % 12
+        )*/
+
+        // THIS IS THE NEW VERSION
+        // Check whether the tile selection was allowed.
+        // This is the case if the chosen tile is on one of the next three positions from the meeple WHICH CONTAINS A
+        // TILE (which was not checked above).
+        // Note that at this point, there is definitely a chosenTile and a meeple on the moonwheel which are different
+        // from each other.
+        // To check the condition, run over the moonwheel in clockwise order starting at the meeple position (or the
+        // meeplePosition+1 and count all the tiles that lie in between the meeple and the chosenTile.
+<span class="fc" id="L429">        var i = (meeplePosition + 1) % 12</span>
+<span class="fc" id="L430">        var counter = 0</span>
+<span class="fc bfc" id="L431" title="All 4 branches covered.">        while(i != chosenTilePosition &amp;&amp; counter &lt; 3){</span>
+<span class="fc bfc" id="L432" title="All 2 branches covered.">            if(Type.shortType().contains(moonwheelTiles[i].type)){</span>
+<span class="fc" id="L433">                counter++</span>
+            }
+<span class="fc" id="L435">            i = (i+1) % 12</span>
+        }
+<span class="fc bfc" id="L437" title="All 2 branches covered.">        return counter &lt; 3</span>
+    }
+
+    /**
+     * This method should only be called directly after [tileSelectionAllowed]. Thus, in this method, no checks are done
+     * regarding the consistency of the moonwheel or whether the selection was allowed in the first place. Also no
+     * checks are done regarding the tile colour.
+     *
+     * The method performs all the updates on the [State] [currentState].
+     */
+    private fun updateMoonwheelTiles(chosenTile: Tile, currentState: State){
+        // Get the moonwheel tiles.
+<span class="fc" id="L449">        val moonwheelTiles = currentState.moonwheel.tiles</span>
+
+        // Get the position of the chosenTile and the meeple.
+<span class="fc" id="L452">        val chosenTilePosition = moonwheelTiles.indexOf(chosenTile)</span>
+<span class="fc bfc" id="L453" title="All 4 branches covered.">        val meeplePosition = moonwheelTiles.indexOf(moonwheelTiles.first { it.type == Type.MEEPLE })</span>
+
+        // Place the meeple at the position of chosenTile and place at the old meeplePosition an empty tile.
+<span class="fc" id="L456">        moonwheelTiles[chosenTilePosition] = moonwheelTiles[meeplePosition]</span>
+<span class="fc" id="L457">        moonwheelTiles[meeplePosition] = Tile()</span>
+<span class="fc" id="L458">    }</span>
+
+    /**
+     * Clones the currentState.The cloned state is added to the list of states and is the new currentState
+     */
+    private fun cloneUpdateState(){
+<span class="fc" id="L464">        val currentGame = rootService.novaluna.game</span>
+<span class="pc bpc" id="L465" title="1 of 2 branches missed.">        checkNotNull(currentGame){ &quot;There is no currently active game.&quot;}</span>
+<span class="fc" id="L466">        val clonedCurrentState = currentGame.currentState.clone()</span>
+<span class="fc" id="L467">        currentGame.states.add(clonedCurrentState)</span>
+<span class="fc" id="L468">        currentGame.currentState = clonedCurrentState</span>
+<span class="fc" id="L469">    }</span>
+
+    /**
+     * To see what the protocol should contain, see
+     * https://sopra.cs.tu-dortmund.de/wiki/sopra/21d/projekt2/start
+     * under KI-Tunier.
+     *
+     * @param chosenTile [Tile] chosen in the move.
+     * @param pos Position were [chosenTile] was placed.
+     * @param taskProtocol Protocol of tasks marked with tokens in this move. Each entry is a triple, with the [Pair]
+     * marking the position of the tile the task is on, the [Int] marking which task it is on the tile and the [Task]
+     * additionally giving the completed task for convenience.
+     * @param currentState [State] for which the protocol is updated.
+     */
+    private fun protocolMove(
+        chosenTile: Tile, pos: Pair&lt;Int, Int&gt;, taskProtocol: List&lt;Triple&lt;Pair&lt;Int,Int&gt;,Int,Task&gt;&gt;, currentState: State
+    ){
+
+<span class="fc" id="L487">        val builder = StringBuilder()</span>
+<span class="fc" id="L488">        builder.append(&quot;ID des ausgewÃ¤hlten Tiles:&quot; + chosenTile.id + &quot;,&quot;)</span>
+<span class="fc" id="L489">            .append(&quot;Position des ausgewÃ¤hlten Tiles:&quot; + pos.toString() + &quot;,&quot;)</span>
+<span class="fc" id="L490">            taskProtocol.forEachIndexed{ i, _ -&gt;</span>
+<span class="fc" id="L491">                builder.append(&quot;Position der erfÃ¼llten Aufgabe:&quot; +</span>
+<span class="fc" id="L492">                taskProtocol[i].first.toString() + &quot;,&quot; +</span>
+                &quot;Nummer des Tasks auf dem Tile&quot; +
+<span class="fc" id="L494">                taskProtocol[i].second + &quot;,&quot; +</span>
+                &quot;Farbe des Tasks&quot; +
+<span class="fc" id="L496">                taskProtocol[i].third.colours.toString() +</span>
+                &quot;\n\n&quot;)
+<span class="fc" id="L498">            }</span>
+<span class="fc" id="L499">            builder.appendLine()</span>
+
+<span class="fc" id="L501">        currentState.protocol += builder</span>
+<span class="fc" id="L502">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

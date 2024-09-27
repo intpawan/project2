@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">entity</a> &gt; <span class="el_source">Player.kt</span></div><h1>Player.kt</h1><pre class="source lang-java linenums">package entity
+
+import kotlinx.serialization.Serializable
+import kotlin.math.abs
+
+/**
+ * Class to represent a player
+ *
+ * It is characterized by the player's [name], [playerColour], [playerType] and the players [tokens].
+ *
+ * Each player also has a [grid], a 9x9-[Array] (or more specific: Array of Arrays) representing the place the player
+ * places his tiles.
+ * Finally, each player has a [Set] of [Type]-Pair&lt;Int,Int&gt;-[Pair]s called [clusters]. A cluster, meaning a
+ * [Type]-Pair&lt;Int,Int&gt;-[Pair] is a number of neighbouring tiles of the same colour that can be used to complete a task.
+ * So clusters contains all the collections of such neighbouring tiles. (More precisely, a cluster contains only the
+ * positions, the tiles can than be accessed over [grid].)
+ *
+ * IMPORTANT: Adding a [Tile] to [grid] should only be done with [placeTileOnGrid].
+ *
+ * @property name Name of the player
+ * @property playerColour [PlayerColour] of the player.
+ * @property playerType [PlayerType] of the player, i.e. human or AI with certain difficulty.
+ * @property tokens Tokens of the player.
+ * @property choseTip Flag to show wether the player chose a tip during the game.
+ * @property grid Player's grid where the [Tile]s can be placed. Adding to grid should only happen with addTileToGrid.
+ * @property clusters Contains all the collections of neighbouring tiles of the same colour.
+ */
+<span class="pc bpc" id="L28" title="7 of 19 branches missed.">@Serializable</span>
+<span class="fc" id="L29">data class Player(val name: String,</span>
+<span class="fc" id="L30">             val playerColour: PlayerColour,</span>
+<span class="fc" id="L31">             val playerType: PlayerType,</span>
+<span class="fc" id="L32">             var tokens: Int) {</span>
+    // ATTENTION: Name of attribute tokenColour from the diagram was changed to playerColour.
+
+<span class="pc bpc" id="L35" title="2 of 4 branches missed.">    var choseTip: Boolean = false</span>
+<span class="pc bpc" id="L36" title="2 of 8 branches missed.">    val grid = Array&lt;Array&lt;Tile&gt;&gt;(9){</span>
+<span class="fc bfc" id="L37" title="All 4 branches covered.">        Array&lt;Tile&gt;(9){</span>
+<span class="fc" id="L38">            Tile()</span>
+        }
+    }
+<span class="pc bpc" id="L41" title="2 of 4 branches missed.">    val clusters : MutableSet&lt;Pair&lt;Type,Set&lt;Pair&lt;Int,Int&gt;&gt;&gt;&gt; = mutableSetOf()</span>
+
+    /**
+     * Function to clone a player.
+     */
+    fun clone(): Player{
+<span class="fc" id="L47">        val tempChoseTip = choseTip</span>
+<span class="fc" id="L48">        val tempGrid = grid</span>
+<span class="fc" id="L49">        val tempClusters = clusters</span>
+<span class="fc" id="L50">        return Player(&quot;&quot; + this.name,this.playerColour,this.playerType,this.tokens).apply {</span>
+<span class="fc" id="L51">            this.choseTip = tempChoseTip</span>
+<span class="fc" id="L52">            tempGrid.forEachIndexed { x, array -&gt;</span>
+<span class="fc" id="L53">                array.forEachIndexed { y, tile -&gt;</span>
+<span class="fc" id="L54">                    this.grid[x][y] = tile.clone()</span>
+<span class="fc" id="L55">                }</span>
+<span class="fc" id="L56">            }</span>
+<span class="fc" id="L57">            tempClusters.forEach { typeSetPair -&gt;</span>
+                // The Type can be directly copied.
+<span class="fc" id="L59">                val newType = typeSetPair.first</span>
+                // Turn the set to copy into a list.
+                // Then create a new list by copying all the elements. The elements are Pair&lt;Int,Int&gt;, thus a new Pair
+                // is created containing the same Int-values.
+<span class="fc" id="L63">                val oldSetAsList = typeSetPair.second.toList()</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">                val newSetAsList = MutableList(oldSetAsList.size){</span>
+<span class="fc" id="L65">                    Pair(oldSetAsList[it].first,oldSetAsList[it].second)</span>
+                }
+
+<span class="fc" id="L68">                clusters.add(Pair(newType,newSetAsList.toSet()))</span>
+<span class="fc" id="L69">            }</span>
+<span class="fc" id="L70">        }</span>
+    }
+
+    /**
+     * Returns the [Type] of the [Tile] at [pos] in the [grid].
+     *
+     * Does not check whether the [Type] is MEEPLE, which would be an inconsistent state.
+     *
+     * @param pos Position for which the type is checked.
+     * @return Type of the tile at [pos].
+     * @exception IllegalArgumentException If pos is not a position.
+     */
+    private fun typeOfGridPosition(pos: Pair&lt;Int,Int&gt;): Type{
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        require(isPosition(pos)) {&quot;pos is not a Position. Coordinates of pos: (${pos.first},${pos.second})&quot;}</span>
+<span class="fc" id="L84">        return grid[pos.first][pos.second].type</span>
+    }
+
+    /**
+     * Checks if the [grid] position is eligible for placing a [Tile].
+     *
+     * This is the case if the position itself is empty and
+     * (1) it has a neighbour which already contains a colored tile or
+     * (2) the grid is completely empty.
+     *
+     * @param pos Grid position to check for eligibility.
+     * @return True if position is eligible for tile placement, else false.
+     * @exception IllegalArgumentException If pos is not a position.
+     */
+    fun isEligibleGridPosition(pos: Pair&lt;Int,Int&gt;): Boolean{
+        // Check that pos is actually a position.
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        require(isPosition(pos)) {&quot;pos is not a Position. Coordinates of pos: (${pos.first},${pos.second})&quot;}</span>
+
+        // Checks first if the grid position is already occupied. If this is the case, false is returned.
+        // If the position is empty, checks if any of the neighbours is not empty
+        // or if the entire grid is empty.
+        // Is one of these conditions true, returns true. Else false.
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        return !Type.shortType().contains(typeOfGridPosition(pos)) &amp;&amp;</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                (getNeighbours(pos).any { Type.shortType().contains(grid[it.first][it.second].type) }</span>
+<span class="fc bfc" id="L108" title="All 6 branches covered.">                        || grid.all { array -&gt; array.all { tile -&gt; tile.type == Type.EMPTY } })</span>
+    }
+
+    /**
+     * Updates [clusters] given the element of [grid] at [pos].
+     *
+     * The method collects all clusters in [clusters] that are of the same [Type] as the [Tile] at [pos] and contain a
+     * position that is a neighbour of [pos]. These clusters are replaced in [clusters] by the union of all these
+     * clusters and the new position [pos].
+     * If no relevant clusters in [clusters] exists, a new one-element cluster of the [Type] of the respective [Tile]
+     * and containing only [pos] is added to [clusters].
+     *
+     * @param pos The [grid] position used in the updating of clusters.
+     * @exception IllegalArgumentException If [pos] is not a position.
+     * @exception IllegalArgumentException If the [Type] of [Tile] at [pos] is not a colour (so is [Type.EMPTY]
+     * or [Type.MEEPLE]).
+     * @exception IllegalStateException If no new cluster was added. This should never be the case if the method is
+     * correct.
+     *
+     */
+    private fun updateClusters(pos: Pair&lt;Int,Int&gt;){
+        // Check that pos is actually a position.
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        require(isPosition(pos)) {&quot;pos is not a Position. Coordinates of pos1: (${pos.first},${pos.second})&quot;}</span>
+        // Get the type at pos.
+<span class="fc" id="L132">        val type = typeOfGridPosition(pos)</span>
+        // Check that the type is appropriate, meaning that it is a colour.
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        require(Type.shortType().contains(type)) {&quot;Wrong type, should be colour but is: $type&quot;}</span>
+
+        // Initialize the new cluster-set with the position.
+<span class="fc" id="L137">        val newClusterSet = mutableSetOf(pos)</span>
+
+        /* Checks for every cluster whether it is relevant.
+        A cluster is relevant if (1) it's type is equal to the value of the argument 'type' and (2) it contains
+        at least one position that is a neighbour of type.
+        All relevant cluster-sets are unionized in newClusterSet and then removed from clusters. */
+<span class="fc" id="L143">        clusters.removeAll { cluster -&gt;</span>
+<span class="fc" id="L144">            val relevant =</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                cluster.first == type &amp;&amp; cluster.second.any {</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">                    areNeighbours(it,pos)</span>
+                }
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            if (relevant){</span>
+<span class="fc" id="L149">                newClusterSet += cluster.second</span>
+            }
+<span class="fc" id="L151">            relevant</span>
+        }
+
+        // Finally, add the new cluster to clusters
+<span class="fc" id="L155">        val added = clusters.add(Pair(type,newClusterSet))</span>
+
+        // Check that an element was added, which always has to be the case
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">        check(added) {&quot;No new cluster added.&quot;}</span>
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * Places [Tile] tile in the [Player]'s [grid] at the position [pos] and updates the [clusters].
+     *
+     * @param tile [Tile] to add to the [grid].
+     * @param pos Position where [tile] is to be added.
+     * @exception IllegalArgumentException [Type] of [tile] is not a colour (so is [Type.EMPTY] or [Type.MEEPLE]).
+     * @exception IllegalArgumentException If pos is not a position.
+     * @exception IllegalArgumentException If pos is not an eligible position.
+     */
+    fun placeTileOnGrid(tile: Tile, pos: Pair&lt;Int,Int&gt;){
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        require(Type.shortType().contains(tile.type)) {&quot;Type of tile should be colour, but is instead: ${tile.type}&quot;}</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        require(isPosition(pos)) {&quot;pos is not a Position. Coordinates of pos: (${pos.first},${pos.second})&quot;}</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        require(isEligibleGridPosition(pos)) {&quot;pos is not a eligible grid position.&quot;}</span>
+
+        // Place the tile in the grid and update the clusters.
+<span class="fc" id="L176">        grid[pos.first][pos.second] = tile</span>
+<span class="fc" id="L177">        updateClusters(pos)</span>
+<span class="fc" id="L178">    }</span>
+
+<span class="nc" id="L180">    companion object{</span>
+        /**
+         * Checks whether pos is a grid position.
+         */
+        fun isPosition(pos: Pair&lt;Int,Int&gt;): Boolean{
+<span class="fc bfc" id="L185" title="All 12 branches covered.">            return pos.first in 0..8 &amp;&amp; pos.second in 0..8</span>
+        }
+
+        /**
+         * Gets all neighbours of a position.
+         */
+        fun getNeighbours(pos: Pair&lt;Int,Int&gt;): Set&lt;Pair&lt;Int,Int&gt;&gt;{
+            // Check that pos is actually a position.
+<span class="fc bfc" id="L193" title="All 2 branches covered.">            require(isPosition(pos)) {&quot;pos is not a Position. Coordinates of pos1: (${pos.first},${pos.second})&quot;}</span>
+
+            // Returns the list of neighbours. First, all possible neighbours are created. Then the ones that do not exist
+            // are filtered out.
+<span class="fc" id="L197">            return listOf(</span>
+<span class="fc" id="L198">                Pair(pos.first,pos.second-1),</span>
+<span class="fc" id="L199">                Pair(pos.first,pos.second+1),</span>
+<span class="fc" id="L200">                Pair(pos.first-1,pos.second),</span>
+<span class="fc" id="L201">                Pair(pos.first+1,pos.second)</span>
+<span class="fc" id="L202">            ).filter {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">                isPosition(it)</span>
+<span class="fc" id="L204">            }.toSet()</span>
+        }
+
+        /**
+         * Checks if pos1 and pos2 are neighbours. If they are the same, they are not neighbours.
+         */
+        fun areNeighbours(pos1: Pair&lt;Int,Int&gt;, pos2: Pair&lt;Int,Int&gt;): Boolean{
+            // Check that pos1, pos2 are actually positions.
+<span class="fc bfc" id="L212" title="All 2 branches covered.">            require(isPosition(pos1)) {&quot;pos1 is not a Position. Coordinates of pos1: (${pos1.first},${pos1.second})&quot;}</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            require(isPosition(pos2)) {&quot;pos1 is not a Position. Coordinates of pos1: (${pos2.first},${pos2.second})&quot;}</span>
+
+            // Calculate the differences in absolutes for x and y.
+<span class="fc" id="L216">            val xDiff = abs(pos1.first - pos2.first)</span>
+<span class="fc" id="L217">            val yDiff = abs(pos1.second - pos2.second)</span>
+
+            // Check that exactly one is equal 1, the other equal 0. (Here one could also check xDiff + yDiff == 1.)
+<span class="fc bfc" id="L220" title="All 8 branches covered.">            return (xDiff == 1 &amp;&amp; yDiff == 0) || (xDiff == 0 &amp;&amp; yDiff == 1)</span>
+        }
+    }
+<span class="fc" id="L223">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

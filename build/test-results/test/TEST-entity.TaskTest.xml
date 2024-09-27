@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="entity.TaskTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:51" hostname="DESKTOP-4AHVI7A" time="0.932">
+  <properties/>
+  <testcase name="testClone()" classname="entity.TaskTest" time="0.002"/>
+  <testcase name="testGetCompleted()" classname="entity.TaskTest" time="0.001"/>
+  <testcase name="testSerialize()" classname="entity.TaskTest" time="0.87"/>
+  <testcase name="testSetCompleted()" classname="entity.TaskTest" time="0.016"/>
+  <testcase name="testGetColours()" classname="entity.TaskTest" time="0.004"/>
+  <testcase name="testModifyColours()" classname="entity.TaskTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.TileSelectionAllowedTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:21:10" hostname="DESKTOP-4AHVI7A" time="0.031">
+  <properties/>
+  <testcase name="tileSelectionAllowedCaseOne()" classname="service.TileSelectionAllowedTest" time="0.006"/>
+  <testcase name="tileSelectionAllowedCaseTwo()" classname="service.TileSelectionAllowedTest" time="0.008"/>
+  <testcase name="tileSelectionAllowedCaseFour()" classname="service.TileSelectionAllowedTest" time="0.006"/>
+  <testcase name="tileSelectionAllowedCaseThree()" classname="service.TileSelectionAllowedTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

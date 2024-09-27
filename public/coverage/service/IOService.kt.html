@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IOService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">service</a> &gt; <span class="el_source">IOService.kt</span></div><h1>IOService.kt</h1><pre class="source lang-java linenums">package service
+
+import entity.*
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.io.BufferedReader
+import java.io.File
+
+/**
+ * Service layer class that provides reading and writing to the [SAVE_FILE] and [HIGHSCORE_FILE].
+ * It also parses the [CSV_File]. All Files have a default path.
+ *
+ * @property rootService Instance of [RootService] to access the other service layer classes and the entity layer.
+ *
+ * @property CSV_FILE file containing the information for the tiles with their tasks
+ * @property SAVE_FILE file containing all information of the game last saved
+ * @property HIGHSCORE_FILE file containing the list of highscores
+ *
+ *
+ */
+<span class="fc" id="L23">class IOService(val rootService: RootService) : AbstractRefreshingService() {</span>
+<span class="pc" id="L24">    var CSV_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;)</span>
+<span class="pc" id="L25">    var PROTOCOL_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/protocol.csv&quot;)</span>
+<span class="pc" id="L26">    var SAVE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/gameSaved.json&quot;)</span>
+<span class="pc" id="L27">    var HIGHSCORE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/highscoreSaved.json&quot;)</span>
+
+
+    /**
+     * Reads the saved game from [SAVE_FILE] and creates a [Game] object as the new
+     * current game
+     *
+     * @throws IllegalArgumentException if Game-[File] does not end with .json
+     * or does not exist
+     */
+    fun loadGame() {
+<span class="fc" id="L38">        val file = this.SAVE_FILE</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        require(file.extension.equals(&quot;json&quot;)){</span>
+<span class="fc" id="L40">            &quot;The game file should end with .json&quot;</span>
+        }
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        require(file.exists()) {</span>
+<span class="nc" id="L43">            &quot;The game file does not exist&quot;</span>
+        }
+<span class="fc" id="L45">        val gameFileString : String = this.SAVE_FILE.readText()</span>
+<span class="fc" id="L46">        val loadGame : Game = Json.decodeFromString&lt;Game&gt;(gameFileString)</span>
+<span class="fc" id="L47">        this.rootService.novaluna.game = loadGame</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     *  Reads the list of highscores the [HIGHSCORE_FILE]
+     *
+     * @throws IllegalArgumentException if Highscore-[File] does not end with .json or exist
+     */
+    fun loadHighscore() {
+<span class="fc" id="L56">        val fileExtension = this.HIGHSCORE_FILE.extension</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        require(fileExtension.equals(&quot;json&quot;)){</span>
+<span class="fc" id="L58">            &quot;The highscore file should end with .json&quot;</span>
+        }
+<span class="fc" id="L60">        this.HIGHSCORE_FILE.forEachLine { println(it) }</span>
+<span class="fc" id="L61">        val highscoreFileString : String = this.HIGHSCORE_FILE.readText()</span>
+<span class="fc" id="L62">        val loadHighscores : MutableList&lt;Score&gt; =</span>
+<span class="fc" id="L63">            Json.decodeFromString(ListSerializer(Score.serializer()), highscoreFileString) as MutableList&lt;Score&gt;</span>
+<span class="fc" id="L64">        this.rootService.novaluna.highscores = loadHighscores</span>
+<span class="fc" id="L65">    }</span>
+
+
+    /**
+     * Overwrites the [SAVE_FILE] with the currentGame converted as a Json object
+     *
+     * @throws IllegalArgumentException if current game does not exist or the Game-[File] does not
+     * end on .json or exist
+     */
+    fun saveGame() {
+<span class="fc" id="L75">        val novaluna = this.rootService.novaluna</span>
+<span class="fc" id="L76">        val saveGame = novaluna.game</span>
+<span class="pc bpc" id="L77" title="2 of 4 branches missed.">        require(saveGame != null){ &quot;Cannot save game. The current game is not defined&quot; }</span>
+<span class="fc" id="L78">        val fileExtension = this.SAVE_FILE.extension</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        require(fileExtension.equals(&quot;json&quot;)){</span>
+<span class="fc" id="L80">            &quot;The game file should end with .json&quot;</span>
+        }
+<span class="fc" id="L82">        val gameString = Json.encodeToString(saveGame)</span>
+<span class="fc" id="L83">        this.SAVE_FILE.writeText(gameString)</span>
+<span class="fc" id="L84">    }</span>
+
+
+    /**
+     * Overwrites the [HIGHSCORE_FILE] with the current highscore list converted as a Json object
+     *
+     * @throws IllegalArgumentException the Highscore-[File] does not end on .json
+     */
+    fun saveHighscore(){
+<span class="fc" id="L93">        val novaluna = this.rootService.novaluna</span>
+<span class="fc" id="L94">        val saveHighscores = novaluna.highscores</span>
+<span class="fc" id="L95">        val fileExtension = this.HIGHSCORE_FILE.extension</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        require(fileExtension.equals(&quot;json&quot;)){</span>
+<span class="fc" id="L97">            &quot;The highscore file should end with .json&quot;</span>
+        }
+<span class="fc" id="L99">        val highscoresString = Json.encodeToString(saveHighscores)</span>
+<span class="fc" id="L100">        this.HIGHSCORE_FILE.writeText(highscoresString)</span>
+<span class="fc" id="L101">    }</span>
+
+
+   /**
+    * Reads from the given CSV-[File] and creates a list of all lines
+    * where every line is split by comma.
+    * Skips the first line of the CSV-[File] with &quot;ID,colour,cost,task1,task2,task3&quot;
+    *
+    * @throws IllegalArgumentException if CSV-[File] does not end with .csv
+    * @return the list of all lines in the CSV-[File] which are split by comma
+    */
+   fun parseCSV() : MutableList&lt;MutableList&lt;String&gt;&gt;{
+<span class="fc" id="L113">        val fileExtension = CSV_FILE.extension</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        require(fileExtension.equals(&quot;csv&quot;)){</span>
+<span class="fc" id="L115">            &quot;The config file should end with .csv&quot;</span>
+        }
+<span class="fc" id="L117">        val linesCSV : MutableList&lt;MutableList&lt;String&gt;&gt; = mutableListOf()</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        val reader : BufferedReader = CSV_FILE.inputStream().bufferedReader()</span>
+<span class="fc" id="L119">        var firstLine = true</span>
+<span class="fc" id="L120">        reader.lines().forEach{</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            if(firstLine){</span>
+<span class="fc" id="L122">               firstLine  = false</span>
+            }
+            else{
+<span class="fc" id="L125">                linesCSV.add(it.split(&quot;,&quot;) as MutableList&lt;String&gt;)</span>
+            }
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">        return linesCSV</span>
+    }
+
+    /**
+     * Saves the protocol created during the game to the [PROTOCOL_FILE]
+     *
+     * @throws IllegalArgumentException the Protocol-[File] does not end on .csv
+     */
+   fun saveProtocol(){
+<span class="fc" id="L137">        val novaluna = this.rootService.novaluna</span>
+<span class="fc" id="L138">        val saveGame = novaluna.game</span>
+<span class="pc bpc" id="L139" title="2 of 4 branches missed.">        require(saveGame != null){ &quot;Cannot save game. The current game is not defined&quot; }</span>
+<span class="fc" id="L140">        val fileExtension = this.PROTOCOL_FILE.extension</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        require(fileExtension.equals(&quot;csv&quot;)){</span>
+<span class="nc" id="L142">            &quot;The game file should end with .csv&quot;</span>
+        }
+<span class="fc" id="L144">        val protocolString = saveGame.currentState.protocol</span>
+<span class="fc" id="L145">        this.PROTOCOL_FILE.writeText(protocolString)</span>
+<span class="fc" id="L146">   }</span>
+
+    /**
+     * Converts a string into a [Cost]
+     *
+     * @return the fitting cost represented by the string or otherwise [Cost.ZERO]
+     */
+   fun stringToCost(cost : String ) : Cost {
+<span class="fc bfc" id="L154" title="All 9 branches covered.">        return when(cost) {</span>
+<span class="fc" id="L155">            &quot;0&quot; -&gt; Cost.ZERO // Daniel: Added Cost.ZERO identifier</span>
+<span class="fc" id="L156">            &quot;1&quot; -&gt; Cost.ONE</span>
+<span class="fc" id="L157">            &quot;2&quot; -&gt; Cost.TWO</span>
+<span class="fc" id="L158">            &quot;3&quot; -&gt; Cost.THREE</span>
+<span class="fc" id="L159">            &quot;4&quot; -&gt; Cost.FOUR</span>
+<span class="fc" id="L160">            &quot;5&quot; -&gt; Cost.FIVE</span>
+<span class="fc" id="L161">            &quot;6&quot; -&gt; Cost.SIX</span>
+<span class="fc" id="L162">            &quot;7&quot; -&gt; Cost.SEVEN</span>
+<span class="fc" id="L163">            else -&gt; throw IllegalArgumentException(&quot;Illegal cost identifier: $cost&quot;) // Daniel Changed this to exception</span>
+        }
+    }
+
+    /**
+     * Converts a string into a [Type]
+     *
+     * @return the fitting cost represented by the string or otherwise [Type.EMPTY]
+     */
+    fun stringToType(color: String) : Type {
+<span class="fc bfc" id="L173" title="All 5 branches covered.">        return when(color){</span>
+<span class="fc" id="L174">            &quot;blue&quot;,&quot;b&quot; -&gt; Type.BLUE //Daniel: Changed this and the following from b,r,y,c to full names</span>
+<span class="fc" id="L175">            &quot;red&quot;,&quot;r&quot; -&gt; Type.RED</span>
+<span class="fc" id="L176">            &quot;yellow&quot;,&quot;y&quot; -&gt; Type.YELLOW</span>
+<span class="fc" id="L177">            &quot;cyan&quot;,&quot;c&quot; -&gt; Type.CYAN</span>
+<span class="fc" id="L178">            else -&gt; throw IllegalArgumentException(&quot;Illegal type identifier: $color&quot;)// Daniel:Changed this to exception</span>
+        }
+    }
+
+    /**
+     * Returns a [MutableList] of [Tile]s encoded in [CSV_FILE]. Thus [CSV_FILE] has to be set accordingly, if a [File]
+     * different from the default file is supposed to be decoded.
+     *
+     * Note that [CSV_FILE] should encode a complete set of tiles. This is not checked.
+     *
+     * @return The list containing the tiles in the order in which they appear in the CSV-File.
+     */
+    fun csvToTiles(): MutableList&lt;Tile&gt;{
+<span class="fc" id="L191">        val linesList = parseCSV()</span>
+
+        /* This would check whether 68 lines are read from the file (corresponding to 68 tiles).
+        But because checking beyond the number of tiles whether the correct tiles are in the deck is not supposed
+        to be implemented anyway, this check does not really guarantee anything and is thus omitted.*/
+        // check(linesList.size == 68) {&quot;The passed file does not encode 68 Tiles, but instead:${linesList.size}&quot;}
+
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        return MutableList(linesList.size){</span>
+<span class="fc" id="L199">            lineToTile(linesList[it])</span>
+        }
+    }
+
+    /**
+     * Returns a [Tile] created from one [String] which is in the format of one line of the CSV-File.
+     */
+    private fun lineToTile(tileInformation: List&lt;String&gt;): Tile{
+<span class="pc bpc" id="L207" title="2 of 4 branches missed.">        check(tileInformation.size == 6) {</span>
+<span class="nc" id="L208">            &quot;Wrong format: List should contain 6 Strings, contains instead: ${tileInformation.size}&quot;</span>
+        }
+<span class="fc" id="L210">        val id = tileInformation[0].toInt()</span>
+<span class="fc" id="L211">        val type = stringToType(tileInformation[1])</span>
+<span class="fc" id="L212">        val cost = stringToCost(tileInformation[2])</span>
+<span class="fc" id="L213">        val tasks = mutableListOf&lt;Task&gt;()</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        for(i in 3 .. 5){</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">            if( tileInformation[i] != &quot;&quot;)</span>
+<span class="fc" id="L216">            tasks.add(Task(</span>
+<span class="fc" id="L217">                false,</span>
+<span class="fc" id="L218">                stringToTypeList(tileInformation[i])</span>
+            ))
+        }
+<span class="fc" id="L221">        return Tile(type,cost,tasks,id)</span>
+    }
+
+    /**
+     * Returns a [MutableList] of [Type]s, which is encoded from the given [String].
+     */
+    private fun stringToTypeList(colorLetters: String): MutableList&lt;Type&gt;{
+<span class="pc bpc" id="L228" title="3 of 6 branches missed.">        check(colorLetters.length in 1..4){</span>
+<span class="nc" id="L229">            &quot;Wrong format: String should contain 1 to 4 characters, but instead: ${colorLetters.length}&quot;</span>
+        }
+<span class="pc bpc" id="L231" title="2 of 4 branches missed.">        check(colorLetters.filterNot { listOf('b','c','r','y').contains(it) } == &quot;&quot; ){</span>
+<span class="nc" id="L232">            &quot;Wrong information: The letters of the String have to be in {b,c,r,y}, but String is instead: $colorLetters&quot;</span>
+        }
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        return MutableList(colorLetters.length) {</span>
+<span class="fc" id="L235">            stringToType(colorLetters[it].toString())</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

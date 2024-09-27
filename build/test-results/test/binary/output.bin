@@ -1,0 +1,7 @@
+?A	Player1
+?A	Player2
+?A0
+?ANTile(type=CYAN, cost=1, tasks=[Task(completed=true, colours=[CYAN])], id=-1)
+?C™((Tile(type=YELLOW, cost=7, tasks=[Task(completed=false, colours=[YELLOW, YELLOW]), Task(completed=false, colours=[CYAN, BLUE])], id=-1), (0, 1)), 100)
+?J3(Tile(type=CYAN, cost=1, tasks=[], id=1), (0, 0))
+`a«[{"avgScore":14.5,"winner":"Anny"},{"avgScore":3.0,"winner":"Will"},{"avgScore":5.0,"winner":"John"},{"avgScore":20.3,"winner":"Max"},{"avgScore":11.1,"winner":"Brian"}]

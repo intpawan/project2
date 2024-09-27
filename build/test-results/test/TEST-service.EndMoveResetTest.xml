@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.EndMoveResetTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:21:08" hostname="DESKTOP-4AHVI7A" time="0.15">
+  <properties/>
+  <testcase name="resetCase1()" classname="service.EndMoveResetTest" time="0.032"/>
+  <testcase name="resetCase2()" classname="service.EndMoveResetTest" time="0.001"/>
+  <testcase name="endMoveNoActiveGame()" classname="service.EndMoveResetTest" time="0.002"/>
+  <testcase name="endMoveMoonwheelTiles()" classname="service.EndMoveResetTest" time="0.081"/>
+  <testcase name="endMovePlayerPosition()" classname="service.EndMoveResetTest" time="0.018"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

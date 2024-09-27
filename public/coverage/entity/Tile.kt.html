@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tile.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">entity</a> &gt; <span class="el_source">Tile.kt</span></div><h1>Tile.kt</h1><pre class="source lang-java linenums">package entity
+
+import kotlinx.serialization.Serializable
+
+/**
+ *Data class for the games [Tile].
+ *
+ * It is characterized by a [Type], a [Cost] and a List of [Task]s.
+ *
+ * About [id]:
+ * Tiles read from csv-files get the id specified there.
+ * Tiles created without specifying the id get the id -1.
+ * The meeple should get the id 69.
+ * Empty tiles should get the id 0.
+ */
+<span class="pc bpc" id="L16" title="3 of 12 branches missed.">@Serializable</span>
+<span class="fc bfc" id="L17" title="All 4 branches covered.">data class Tile (val type: Type, val cost: Cost, val tasks: MutableList&lt;Task&gt;, val id: Int  = -1)</span>
+{
+    /**
+     *  Constructor for an empty tile. The cost of an empty tile is set to Zero,
+     *  the lowest possible value.
+     *  As there are no tasks to fulfill, the list of tasks on that tile is empty.
+     *  The id of an empty tile is set to 0.
+     */
+<span class="fc" id="L25">    constructor(): this(Type.EMPTY, Cost.ZERO, mutableListOf&lt;Task&gt;(), 0)</span>
+
+    /**
+     * function to clone, needs to be implemented.
+     */
+    fun clone(): Tile{
+<span class="fc" id="L31">        return Tile(</span>
+<span class="fc" id="L32">            this.type,</span>
+<span class="fc" id="L33">            this.cost,</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            MutableList(tasks.size){</span>
+<span class="fc" id="L35">                tasks[it].clone()</span>
+            },
+<span class="fc" id="L37">            this.id</span>
+        )
+    }
+<span class="fc" id="L40">}</span>
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

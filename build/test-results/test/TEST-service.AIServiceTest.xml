@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.AIServiceTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:52" hostname="DESKTOP-4AHVI7A" time="15.717">
+  <properties/>
+  <testcase name="testGetPositions()" classname="service.AIServiceTest" time="0.093"/>
+  <testcase name="testEvaluateNextTurnZero()" classname="service.AIServiceTest" time="0.004"/>
+  <testcase name="testAISimulationTaskCompleted()" classname="service.AIServiceTest" time="0.314"/>
+  <testcase name="testMinimax2()" classname="service.AIServiceTest" time="0.013"/>
+  <testcase name="testMinimax3()" classname="service.AIServiceTest" time="1.939"/>
+  <testcase name="testEvaluateNextTurnPositive()" classname="service.AIServiceTest" time="0.027"/>
+  <testcase name="testEvaluateNextTurnNegative()" classname="service.AIServiceTest" time="0.002"/>
+  <testcase name="testHighScore()" classname="service.AIServiceTest" time="0.001"/>
+  <testcase name="testIsTerminalEmptyStack()" classname="service.AIServiceTest" time="0.002"/>
+  <testcase name="testAIPlayer()" classname="service.AIServiceTest" time="0.001"/>
+  <testcase name="testIsTerminalSomeoneWon()" classname="service.AIServiceTest" time="0.002"/>
+  <testcase name="testGetTip()" classname="service.AIServiceTest" time="13.27"/>
+  <testcase name="testGetValidTiles()" classname="service.AIServiceTest" time="0.003"/>
+  <testcase name="testIsTerminal()" classname="service.AIServiceTest" time="0.001"/>
+  <testcase name="testAIMove1()" classname="service.AIServiceTest" time="0.01"/>
+  <system-out><![CDATA[Player1
+Player2
+0
+Tile(type=CYAN, cost=1, tasks=[Task(completed=true, colours=[CYAN])], id=-1)
+((Tile(type=YELLOW, cost=7, tasks=[Task(completed=false, colours=[YELLOW, YELLOW]), Task(completed=false, colours=[CYAN, BLUE])], id=-1), (0, 1)), 100)
+(Tile(type=CYAN, cost=1, tasks=[], id=1), (0, 0))
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

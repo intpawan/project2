@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AIService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">service</a> &gt; <span class="el_source">AIService.kt</span></div><h1>AIService.kt</h1><pre class="source lang-java linenums">package service
+
+import entity.*
+
+
+/**
+ * [AIService] provides all actions that can NPC in NovaLuna Game perform.
+ * @property rootService provides necessary access to other services, current game, state
+ * We habe implemented AI using MiniMax algorithm that calculates the best combination of [Tile]
+ * and suitable position for it. Tiles that will be checked are 3 [Tiles] on the [Moonwheel] that
+ * [Player] can choose when it is his turn. The Algorithm works recursively.
+ */
+
+<span class="fc" id="L14">class AIService(private val rootService: RootService): AbstractRefreshingService() {</span>
+
+    /**
+     * method to make an AI move
+     * @param state for the minimax algorithm, that will provide the best option for a move
+     * consisting of [Tile] to place and suitable position for it
+     * @param difficulty of AI will influence the depth parameter of the minimax algorithm.
+     * There are three options
+     * case 1: [PlayerType.EASY] minimax algorithm will be executed with depth 3
+     * case 2: [PlayerType.NORMAL] minimax algorithm will be executed with depth 6
+     * case 3: [PlayerType.HARD] minimax algorithm will be executed with depth 10
+     */
+    fun aiMove(state: State, difficulty:PlayerType ) : Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;{
+
+
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        if (difficulty== PlayerType.HARD){</span>
+
+<span class="nc" id="L31">            val move:Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; = minimax(state,3,-999999999,999999999,aiplayer = true)</span>
+           // rootService.playerActionService.makeMove(move.first.first, move.first.second)
+<span class="nc" id="L33">            return Pair(move.first.first, move.first.second)</span>
+
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        }else if (difficulty== PlayerType.NORMAL){</span>
+
+<span class="nc" id="L37">            val move:Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; = minimax(state,2,-999999999,999999999,aiplayer = true)</span>
+            //rootService.playerActionService.makeMove(move.first.first, move.first.second)
+<span class="nc" id="L39">            return Pair(move.first.first, move.first.second)</span>
+
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        }else if (difficulty== PlayerType.EASY){</span>
+
+<span class="nc" id="L43">            val move:Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; = minimax(state,1,-999999999,999999999,aiplayer = true)</span>
+           // rootService.playerActionService.makeMove(move.first.first, move.first.second)
+<span class="nc" id="L45">            return Pair(move.first.first, move.first.second)</span>
+
+        }
+
+<span class="fc" id="L49">       return Pair(Tile(),Pair(0,0))</span>
+    }
+
+    /**
+     * Method getAITip that gives optimal possibble [Tile] and position for this [Tile].
+     * Tip will be computed by AI [PlayerType.HARD]
+     * @param state
+     * @return pair of [Tile] to place and suitable position for it
+     */
+    fun getAITip(state: State): Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;{
+<span class="fc" id="L59">        val tip = minimax(state,2,-999999999,999999999,aiplayer = true)</span>
+<span class="fc" id="L60">        return Pair(tip.first.first, tip.first.second)</span>
+    }
+
+
+    /**
+     * additionally method isTerminal is necessary for minimax algorithm and actually is a termination condition
+     * for recursion.
+     * @param state that should be checked
+     * @return boolean true if
+     * case 1: there is no [Tiles] in stack and there is no [Tiles] on [Moonwheel]
+     * case 2: current player has won a game and has no token
+     * otherwise output will be false
+     */
+
+    fun isTerminal(state: State): Boolean {
+
+        // var emptyMoonwheel : Boolean = false
+<span class="fc" id="L77">        var meepelPosition  = 0</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for(i in 0 .. 11 ){</span>
+
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (state.moonwheel.tiles[i].type == Type.MEEPLE){</span>
+<span class="fc" id="L81">                meepelPosition = i</span>
+            }
+
+        }
+
+<span class="fc" id="L86">        var numberOfEmptyTiles = 0</span>
+<span class="pc bpc" id="L87" title="1 of 4 branches missed.">        for (j in meepelPosition+1 .. meepelPosition+11){</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if(state.moonwheel.tiles[j%state.moonwheel.tiles.size].type == Type.EMPTY ){</span>
+
+<span class="fc" id="L90">                numberOfEmptyTiles++</span>
+
+            }
+        }
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if(numberOfEmptyTiles == 11){</span>
+<span class="fc" id="L96">            return true</span>
+
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        }else if(state.currentPlayer.tokens==0){</span>
+<span class="nc" id="L99">            return true</span>
+        }
+<span class="fc" id="L101">        return false</span>
+
+    }
+    /**
+     * highScore method that calculates [Score] for a winning player
+     * @param game is a [Novaluna.game] for which high score has to be calculated
+     * @return Name of [Player] and his score
+     * case 1: if [Player] has chosen Undo then the whole game will not appear in highscore list
+     * case 2: if [Player] has requested a tip then only his tokens will not be used for the calculation
+     * of average score
+     */
+    fun highScore(game: Game):Pair&lt;String,Double&gt;{
+
+<span class="fc" id="L114">        var scoreAndPlayer: Pair&lt;String,Double&gt; = Pair(&quot;&quot;,0.0)</span>
+<span class="fc" id="L115">        var haveWinner = false</span>
+<span class="fc" id="L116">        val meeplePosition = game.currentState.moonwheel.tiles.indexOf(</span>
+<span class="fc bfc" id="L117" title="All 4 branches covered.">            game.currentState.moonwheel.tiles.first { it.type == Type.MEEPLE })</span>
+
+<span class="fc" id="L119">        var numberOfEmptyTiles = 0</span>
+<span class="pc bpc" id="L120" title="1 of 4 branches missed.">        for (j in meeplePosition+1 .. meeplePosition+11){</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            if(game.currentState.moonwheel.tiles[j%game.currentState.moonwheel.tiles.size].type == Type.EMPTY ){</span>
+
+<span class="fc" id="L123">                numberOfEmptyTiles++</span>
+            }
+        }
+
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if(!game.choseUndo){</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">            for(player in game.currentState.players){</span>
+<span class="pc bpc" id="L129" title="1 of 4 branches missed.">                if(player.tokens == 0 &amp;&amp; !player.choseTip){</span>
+<span class="fc" id="L130">                    haveWinner = true</span>
+<span class="fc" id="L131">                    scoreAndPlayer= scoreAndPlayer.copy(first = player.name)</span>
+
+<span class="fc" id="L133">                    var a = 0.0</span>
+
+<span class="fc bfc" id="L135" title="All 2 branches covered.">                    for(p in game.currentState.players){</span>
+
+<span class="fc" id="L137">                        a += p.tokens</span>
+                    }
+<span class="fc" id="L139">                    scoreAndPlayer= scoreAndPlayer.copy(second = a/(game.currentState.players.size - 1))</span>
+                }
+            }
+<span class="fc bfc" id="L142" title="All 4 branches covered.">            if (numberOfEmptyTiles == 11 &amp;&amp; !haveWinner){</span>
+
+<span class="fc" id="L144">                var minPlayer = game.currentState.players[0]</span>
+
+<span class="fc bfc" id="L146" title="All 2 branches covered.">                for(player in game.currentState.players) {</span>
+
+<span class="pc bpc" id="L148" title="2 of 4 branches missed.">                    if (!player.choseTip &amp;&amp; !game.currentState.players[0].choseTip){ minPlayer = player }</span>
+<span class="nc" id="L149">                    else { return scoreAndPlayer}</span>
+
+                }
+
+<span class="pc bpc" id="L153" title="1 of 4 branches missed.">                for(p in 0 until game.currentState.players.size){</span>
+
+<span class="pc bpc" id="L155" title="3 of 4 branches missed.">                    if(game.currentState.players[p].tokens &lt; minPlayer.tokens &amp;&amp; !game.currentState.players[p].choseTip){</span>
+
+<span class="nc" id="L157">                        minPlayer = game.currentState.players[p]</span>
+                    }
+                }
+<span class="fc" id="L160">                scoreAndPlayer= scoreAndPlayer.copy(first = minPlayer.name)</span>
+<span class="fc" id="L161">                var b = 0.0</span>
+
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                for(p in game.currentState.players){</span>
+
+<span class="fc bfc" id="L165" title="All 2 branches covered.">                    if (p!= minPlayer) {</span>
+<span class="fc" id="L166">                        b += p.tokens</span>
+                    }
+
+                }
+<span class="fc" id="L170">                scoreAndPlayer= scoreAndPlayer.copy(second = b/(game.currentState.players.size - 1))</span>
+            }
+        }
+<span class="fc" id="L173">        return scoreAndPlayer</span>
+    }
+
+    /**
+     * getValidTiles method provides array consisting of [Tiles] that are available and valid to peek.
+     * According to game rules [Tiles] that available to peek are 3 [Tiles] standing next to [Type.MEEPLE]
+     * @param state where the calculations take place
+     * @return array of [Tiles] that current [Player] is allowed to peek
+     */
+    fun getValidTiles(state: State): MutableList&lt;Tile&gt; {
+        var meeplePos: Int
+<span class="fc" id="L184">        val validTiles:MutableList&lt;Tile&gt; = mutableListOf()</span>
+<span class="fc" id="L185">        var a = 0</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        for(i in 0.. 11) {</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">            if (state.moonwheel.tiles[i].type == Type.MEEPLE) {</span>
+<span class="fc" id="L188">                meeplePos = i</span>
+
+<span class="pc bpc" id="L190" title="1 of 4 branches missed.">                for (j in meeplePos+1 .. meeplePos+11){</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">                    if(state.moonwheel.tiles[j%state.moonwheel.tiles.size].type!= Type.MEEPLE &amp;&amp;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                        state.moonwheel.tiles[j%state.moonwheel.tiles.size].type!= Type.EMPTY ){</span>
+
+<span class="fc bfc" id="L194" title="All 2 branches covered.">                        if(a&lt;3) {</span>
+<span class="fc" id="L195">                            validTiles.add(state.moonwheel.tiles[j % state.moonwheel.tiles.size])</span>
+<span class="fc" id="L196">                            a++</span>
+
+                        }
+<span class="fc" id="L199">                        else return validTiles</span>
+                    }
+
+                }
+
+            }
+        }
+<span class="fc" id="L206">        return validTiles</span>
+    }
+
+    /**
+     * getPositions method provides all positions List of Pair coordinates where current [Player]
+     * can place a chosen [Tile] on his [Player.grid]
+     * @param player for which valid positions list is to be calculated
+     * @return posList list of all valid coordinates (x,y) for a given [Player]
+     **/
+
+    fun getPositions(player: Player): MutableList&lt;Pair&lt;Int,Int&gt;&gt; {
+<span class="fc" id="L217">        val grid = player.grid</span>
+<span class="fc" id="L218">        val posList: MutableList&lt;Pair&lt;Int,Int&gt;&gt; = mutableListOf()</span>
+
+<span class="fc" id="L220">        grid.forEachIndexed { x, array -&gt;</span>
+<span class="fc" id="L221">            array.forEachIndexed { y, _ -&gt;</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">                if(player.isEligibleGridPosition(Pair(x,y))){</span>
+
+<span class="fc" id="L224">                    posList.add(Pair(x,y))</span>
+                }
+
+<span class="fc" id="L227">            }</span>
+
+<span class="fc" id="L229">        }</span>
+<span class="fc" id="L230">        return posList</span>
+    }
+
+
+    /**
+     * evaluateNextTurn method computes score that is necessary for MiniMax algorithm.
+     * @param state that is current
+     * @param player for which the turn has to be evaluated
+     * @return tuple where first element is a pair consisting of [Tile] and itÂ´s positions
+     * and the second element is score that will be calculated if a [Player] will place
+     * this [Tile] on this position
+     */
+
+    fun evaluateNextTurn(state : State,player : Player) : Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; {
+
+<span class="fc" id="L245">        var anzahlmin =0</span>
+<span class="fc" id="L246">        var anzahlmax =0</span>
+
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if(player.playerType != PlayerType.HUMAN){</span>
+
+<span class="fc bfc" id="L250" title="All 2 branches covered.">            for(p in state.players){</span>
+
+<span class="pc bpc" id="L252" title="1 of 4 branches missed.">                if(p.tokens &lt; player.tokens &amp;&amp; p!=player){</span>
+
+<span class="fc" id="L254">                    anzahlmin ++</span>
+
+                }
+<span class="pc bpc" id="L257" title="1 of 4 branches missed.">                if(p.tokens &gt; player.tokens &amp;&amp; p!=player){</span>
+
+<span class="fc" id="L259">                    anzahlmax++</span>
+
+                }
+
+
+            }
+<span class="fc bfc" id="L265" title="All 2 branches covered.">            return if (anzahlmin&gt;anzahlmax ){</span>
+<span class="fc" id="L266">                Pair(Pair(Tile(),Pair(0,0)),-100)</span>
+
+
+<span class="fc bfc" id="L269" title="All 2 branches covered.">            }else if (anzahlmin&lt;anzahlmax ){</span>
+<span class="fc" id="L270">                Pair(Pair(Tile(),Pair(0,0)),100)</span>
+
+
+<span class="fc" id="L273">            }else Pair(Pair(Tile(),Pair(0,0)),0)</span>
+
+
+        }else {
+
+<span class="fc bfc" id="L278" title="All 2 branches covered.">            for(p in state.players){</span>
+
+<span class="pc bpc" id="L280" title="1 of 4 branches missed.">                if(p.tokens &lt; player.tokens &amp;&amp; p!=player){</span>
+
+<span class="fc" id="L282">                    anzahlmin ++</span>
+
+
+                }
+<span class="pc bpc" id="L286" title="1 of 4 branches missed.">                if(p.tokens &gt; player.tokens &amp;&amp; p!=player){</span>
+
+<span class="fc" id="L288">                    anzahlmax++</span>
+
+                }
+
+            }
+<span class="fc bfc" id="L293" title="All 2 branches covered.">            return if (anzahlmin&gt;anzahlmax ){</span>
+<span class="fc" id="L294">                Pair(Pair(Tile(),Pair(0,0)),100)</span>
+
+
+<span class="fc bfc" id="L297" title="All 2 branches covered.">            }else if (anzahlmin&lt;anzahlmax ){</span>
+<span class="fc" id="L298">                Pair(Pair(Tile(),Pair(0,0)),-100)</span>
+
+
+<span class="fc" id="L301">            }else Pair(Pair(Tile(),Pair(0,0)),0)</span>
+
+
+        }
+
+    }
+
+    /**
+     * makeAISimulation is method that performs an action (placing [Tile] on [Player.grid])
+     * in state that is a copy of the current state of a [Game]
+     * @param tile that has to be placed
+     * @param state that has to be cloned from a current state
+     * @param position tuple of coordinates
+     * @return state that will be reached py performing an action
+     */
+
+    fun makeAISimulation(tile: Tile, state: State, position: Pair&lt;Int,Int&gt;): State {
+
+<span class="fc" id="L319">        val clonedState = state.clone()</span>
+<span class="fc" id="L320">        val clonedTile = clonedState.moonwheel.tiles.first {</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">            it == tile</span>
+        }
+        // On the cloned state a move is simulated, meaning that the player is advanced, the meeple is advanced and
+        // the player's grid is updated, including the placement of tokens.
+        // What not happened: The currentPlayer POINTER was not advanced.
+<span class="fc" id="L326">        rootService.playerActionService.manipulateStateMakeMove(clonedTile,position,clonedState)</span>
+        // The currentPlayer POINTER is advanced.
+<span class="fc" id="L328">        rootService.gameService.advanceCurrentPlayer(clonedState)</span>
+        // WHAT NOT HAPPENED:
+        // It was not checked, wether an endGameCondition was reached. The moonwheel was also not refilled.
+<span class="fc" id="L331">        return clonedState</span>
+    }
+
+
+    /**
+     * aiPlayer method checks whether [Player] is NPC or human
+     * @param player that has to be checked
+     * @return true if [Player] is AI player, false otherwise
+     */
+
+    fun aiplayer (player: Player):Boolean{
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        return player.playerType != PlayerType.HUMAN</span>
+    }
+
+    /**
+     * MiniMax algorithm is a decision algorithm that is used for minimizing the possible loss of opponent
+     * and maximizing gain of AI players.
+     * @param state
+     * @param depth that regulated depth of decision tree
+     * @param aiplayer that identifies whether current player is AI or human
+     * @return tupel consisting of two elements: the first one is a tuple of [Tile] and position
+     * the second one is score that will be computed for placing this [Tile] on this position
+     * supposed to be maximum for AI player and minimum for human player
+     */
+
+    fun minimax(state: State, depth: Int, alpha:Int ,
+                beta:Int, aiplayer: Boolean ) : Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; {
+
+<span class="fc" id="L359">        val getValidTiles: MutableList&lt;Tile&gt; = getValidTiles(state) // die 3 mÃ¶gliche Tiles</span>
+<span class="fc" id="L360">        val validPositions: MutableList&lt;Pair&lt;Int,Int&gt;&gt; = getPositions(state.currentPlayer)</span>
+<span class="fc" id="L361">        val isTerminal: Boolean = isTerminal(state) // unsere State ist Terminal</span>
+
+<span class="pc bpc" id="L363" title="1 of 4 branches missed.">        if (depth == 0 || isTerminal) {</span>
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">            return if (isTerminal) {</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">                if (state.currentPlayer.tokens==0){</span>
+<span class="nc bnc" id="L366" title="All 2 branches missed.">                    if (state.currentPlayer.playerType != PlayerType.HUMAN){</span>
+<span class="nc" id="L367">                        Pair(Pair(Tile(),Pair(0,0)),10000)// Ai Player hat kein Scheiben mehr</span>
+<span class="nc" id="L368">                    } else Pair(Pair(Tile(),Pair(0,0)),-10000)</span>
+                } else
+<span class="nc" id="L370">                    Pair(Pair(Tile(),Pair(0,0)),0)  // kein PlÃ¤tchen mehr in NachziehStapel</span>
+
+            } else {
+<span class="fc" id="L373">                evaluateNextTurn(state,state.currentPlayer) // wenn depth=0 und wir sollen die BlÃ¤tter auswerten</span>
+            }
+        }
+
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        var sscore = if(aiplayer(state.currentPlayer)) -999999999 else 999999999</span>
+<span class="fc" id="L378">        var pposition:Pair&lt;Int,Int&gt; = Pair(0,0)</span>
+<span class="fc" id="L379">        var ttile = Tile()</span>
+
+        //maximizing
+<span class="fc bfc" id="L382" title="All 2 branches covered.">        if (aiplayer(state.currentPlayer)) {</span>
+
+<span class="fc bfc" id="L384" title="All 2 branches covered.">            for (tile in getValidTiles) {</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">                for(position in validPositions){</span>
+
+<span class="fc" id="L387">                    val aiTurn : State = makeAISimulation(tile,state,position)</span>
+
+<span class="pc bpc" id="L389" title="1 of 2 branches missed.">                    if (aiplayer(aiTurn.currentPlayer)){</span>
+
+<span class="nc" id="L391">                        val newScoreAndMove = minimax(aiTurn,depth-1, alpha, beta, true)</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">                        if (newScoreAndMove.second &gt; sscore){</span>
+
+<span class="nc" id="L394">                            ttile = tile</span>
+<span class="nc" id="L395">                            pposition = position</span>
+<span class="nc" id="L396">                            sscore = newScoreAndMove.second</span>
+                        }
+                    }
+
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">                    else if (!aiplayer(aiTurn.currentPlayer)) {</span>
+<span class="fc" id="L401">                        val newScoreAndMove  = minimax(aiTurn,depth-1, alpha, beta,false)</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">                        if (newScoreAndMove.second &gt; sscore){</span>
+
+<span class="fc" id="L404">                            ttile = tile</span>
+<span class="fc" id="L405">                            pposition = position</span>
+<span class="fc" id="L406">                            sscore = newScoreAndMove.second</span>
+                        }
+                    }
+
+                }
+            }
+        }
+        //Minimizing
+        else {
+<span class="fc bfc" id="L415" title="All 2 branches covered.">            for (tile in getValidTiles) {</span>
+
+<span class="fc bfc" id="L417" title="All 2 branches covered.">                for(position in validPositions){</span>
+
+<span class="fc" id="L419">                    val aiTurn : State = makeAISimulation(tile,state,position)</span>
+
+<span class="pc bpc" id="L421" title="1 of 2 branches missed.">                    if (aiplayer(aiTurn.currentPlayer)){</span>
+
+<span class="nc" id="L423">                        val newScoreAndMove = minimax(aiTurn,depth-1, alpha, beta,true)</span>
+
+<span class="nc bnc" id="L425" title="All 2 branches missed.">                        if (newScoreAndMove.second &lt; sscore){</span>
+<span class="nc" id="L426">                            ttile = tile</span>
+<span class="nc" id="L427">                            pposition = position</span>
+<span class="nc" id="L428">                            sscore = newScoreAndMove.second</span>
+                        }
+                    }
+
+<span class="pc bpc" id="L432" title="1 of 2 branches missed.">                    if (!aiplayer(aiTurn.currentPlayer)) {</span>
+<span class="fc" id="L433">                        val newScoreAndMove  = minimax(aiTurn,depth-1, alpha, beta,false)</span>
+
+<span class="fc bfc" id="L435" title="All 2 branches covered.">                        if (newScoreAndMove.second &lt; sscore){</span>
+<span class="fc" id="L436">                            ttile = tile</span>
+<span class="fc" id="L437">                            pposition = position</span>
+<span class="fc" id="L438">                            sscore = newScoreAndMove.second</span>
+                        }
+
+                    }
+                }
+
+            }
+        }
+<span class="fc" id="L446">        return   Pair(Pair(ttile,pposition), sscore)</span>
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

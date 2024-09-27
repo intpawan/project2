@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="entity.GameTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:50" hostname="DESKTOP-4AHVI7A" time="0.083">
+  <properties/>
+  <testcase name="testGetAndModifyStates()" classname="entity.GameTest" time="0.004"/>
+  <testcase name="testGetAndSetAiTournament()" classname="entity.GameTest" time="0.031"/>
+  <testcase name="testGetAndSetTournamentProtocol()" classname="entity.GameTest" time="0.004"/>
+  <testcase name="testGetAndSetCurrentState()" classname="entity.GameTest" time="0.01"/>
+  <testcase name="testGetAndSetAiSpeed()" classname="entity.GameTest" time="0.004"/>
+  <testcase name="testGetAndSetChoseUndo()" classname="entity.GameTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

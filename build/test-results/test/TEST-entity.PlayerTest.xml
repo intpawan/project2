@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="entity.PlayerTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:50" hostname="DESKTOP-4AHVI7A" time="0.123">
+  <properties/>
+  <testcase name="testGetClusters()" classname="entity.PlayerTest" time="0.006"/>
+  <testcase name="testClone()" classname="entity.PlayerTest" time="0.019"/>
+  <testcase name="testSetChoseTip()" classname="entity.PlayerTest" time="0.004"/>
+  <testcase name="testGetChoseTip()" classname="entity.PlayerTest" time="0.003"/>
+  <testcase name="testGetPlayerType()" classname="entity.PlayerTest" time="0.009"/>
+  <testcase name="testGetGrid()" classname="entity.PlayerTest" time="0.01"/>
+  <testcase name="testGetName()" classname="entity.PlayerTest" time="0.002"/>
+  <testcase name="testGetPlayerColour()" classname="entity.PlayerTest" time="0.002"/>
+  <testcase name="testSetTokens()" classname="entity.PlayerTest" time="0.013"/>
+  <testcase name="testGetTokens()" classname="entity.PlayerTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">service</a> &gt; <span class="el_source">GameService.kt</span></div><h1>GameService.kt</h1><pre class="source lang-java linenums">package service
+
+import entity.*
+import java.io.File
+import kotlin.random.Random
+
+/**
+ * Service layer class that provides the logic for actions not directly related to a single player.
+ *
+ * @property rootService Instance of [RootService] to access the other service layer classes and the entity layer.
+ */
+<span class="fc" id="L12">class GameService(private val rootService: RootService): AbstractRefreshingService() {</span>
+
+    /**
+     * Method to start a standard game (neither the first game, nor a tournament or a simulation game).
+     *
+     * It is assumed that the player information in [players] is consistent. This is not checked. Consistent means:
+     * The [String]s in [players] are permitted names.
+     * Every [PlayerColour] is unique.
+     *
+     * The order of the triple list [players] is set as the initial playing order.
+     *
+     * @param players [List] of [Triple]s containing the information for the [Player]s to be created.
+     *
+     * @throws IllegalStateException If there is already a currently active game.
+     * @throws IllegalArgumentException If the length of [players] is not between 2 and 4.
+     */
+    fun startNewGame(players: List&lt;Triple&lt;String, PlayerColour, PlayerType&gt;&gt;){
+<span class="fc" id="L29">        startNewGameHelper(players = players)</span>
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * Method to start a first game (with reduced tokens if there are three or four players).
+     *
+     * It is assumed that the player information in [players] is consistent. This is not checked. Consistent means:
+     * The [String]s in [players] are permitted names.
+     * Every [PlayerColour] is unique.
+     *
+     * The order of the triple list [players] is set as the initial playing order.
+     *
+     * @param players [List] of [Triple]s containing the information for the [Player]s to be created.
+     *
+     * @throws IllegalStateException If there is already a currently active game.
+     * @throws IllegalArgumentException If the length of [players] is not between 2 and 4.
+     */
+    fun startNewFirstGame(players: List&lt;Triple&lt;String, PlayerColour, PlayerType&gt;&gt;){
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">        val startingTokens = when(players.size){</span>
+<span class="fc" id="L48">            2 -&gt; 18</span>
+<span class="fc" id="L49">            3 -&gt; 18</span>
+<span class="fc" id="L50">            4 -&gt; 16</span>
+<span class="nc" id="L51">            else -&gt; throw IllegalArgumentException(&quot;Number of players to be created is not between 2 and 4.&quot;)</span>
+        }
+<span class="fc" id="L53">        startNewGameHelper(players = players, startingTokens = startingTokens)</span>
+<span class="fc" id="L54">    }</span>
+
+    /**
+     * Method to start an AI-tournament-game (with reduced tokens if there are three or four players).
+     *
+     * It is assumed that the player information in [players] is consistent. This is not checked. Consistent means:
+     * The [String]s in [players] are permitted names.
+     * Every [PlayerColour] is unique.
+     * There are exactly two players: One KI player of the highest difficulty and one human player
+     *
+     * The order of the triple list [players] is set as the initial playing order.
+     *
+     * @param players [List] of [Triple]s containing the information for the [Player]s to be created.
+     * @param gameConfigFile CSV-[File] containing the [Tile]-Stack information.
+     *
+     * @throws IllegalStateException If there is already a currently active game.
+     * @throws IllegalArgumentException If the length of [players] is not between 2 and 4.
+     */
+    fun startNewAITournamentGame(players: List&lt;Triple&lt;String, PlayerColour, PlayerType&gt;&gt;, gameConfigFile: File){
+<span class="fc" id="L73">        val speedTournamentShuffle = Triple(0,true,false)</span>
+<span class="fc" id="L74">        startNewGameHelper(</span>
+<span class="fc" id="L75">            players = players,</span>
+<span class="fc" id="L76">            gameConfigFile = gameConfigFile,</span>
+            //aiTournament = true,
+            //shuffleTiles = false
+<span class="fc" id="L79">            speedTournamentShuffle = speedTournamentShuffle</span>
+        )
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Method to start an AI-simulation-game (with reduced tokens if there are three or four players).
+     *
+     * It is assumed that the player information in [players] is consistent. This is not checked. Consistent means:
+     * The [String]s in [players] are permitted names.
+     * Every [PlayerColour] is unique.
+     * Every player is an ai-player.
+     *
+     * The order of the triple list [players] is set as the initial playing order.
+     *
+     * @param players [List] of [Triple]s containing the information for the [Player]s to be created.
+     * @param aiSpeed Integer denoting the simulation speed of the AI.
+     *
+     * @throws IllegalStateException If there is already a currently active game.
+     * @throws IllegalArgumentException If the length of [players] is not between 2 and 4.
+     * @throws IllegalArgumentException If [aiSpeed] is negative.
+     */
+    fun startNewAISimulationGame(players: List&lt;Triple&lt;String, PlayerColour, PlayerType&gt;&gt;, aiSpeed: Int){
+<span class="fc" id="L101">        val speedTournamentShuffle = Triple(aiSpeed,false,true)</span>
+<span class="fc" id="L102">        startNewGameHelper(</span>
+<span class="fc" id="L103">            players = players,</span>
+            //aiSpeed = aiSpeed
+<span class="fc" id="L105">            speedTournamentShuffle = speedTournamentShuffle</span>
+        )
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Helper-method to start a new [Game].
+     *
+     * It is assumed that the player information in [players] is consistent. This is not checked. Consistent means:
+     * It is assumed that the [String]s in [players] are permitted names.
+     * Every [PlayerColour] is unique.
+     *
+     * The order of the triple list [players] is set as the initial playing order.
+     *
+     * @param players [List] of [Triple]s containing the information for the [Player]s to be created.
+     * @param startingTokens Number of starting tokens. Needs to be one of the following values: 21,18,16.
+     * @param gameConfigFile CSV-[File] containing the [Tile]-Stack information.
+     * @param speedTournamentShuffle [Triple] containing the information regarding aiSpeed, if it is a tournament game
+     * and whether the [Tile]-Stack should be shuffled (in that order).
+     * @param random Used for the shuffling of the [Tile]-Stack. Can be specified for testing.
+     *
+     * @throws IllegalStateException If there is already a currently active game.
+     * @throws IllegalArgumentException If the length of [players] is not between 2 and 4.
+     * @throws IllegalArgumentException If [startingTokens] is not equal 21 or 18 or 16.
+     * @throws IllegalArgumentException If the aiSpeed in [speedTournamentShuffle] is negative.
+     * @throws IllegalArgumentException If the boolean flags for aiTournament and shuffleTiles in
+     * [speedTournamentShuffle] are both true.
+     */
+<span class="fc" id="L132">    private fun startNewGameHelper(</span>
+        players: List&lt;Triple&lt;String, PlayerColour, PlayerType&gt;&gt;,
+<span class="fc" id="L134">        startingTokens: Int = 21,</span>
+<span class="fc" id="L135">        gameConfigFile: File = File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;),</span>
+        //aiSpeed: Int = 0,
+        //aiTournament: Boolean = false,
+        //shuffleTiles: Boolean = true,
+<span class="fc" id="L139">        speedTournamentShuffle: Triple&lt;Int,Boolean,Boolean&gt; = Triple(0,false,true),</span>
+<span class="fc" id="L140">        random: Random = Random.Default</span>
+    ){
+<span class="fc" id="L142">        val aiSpeed = speedTournamentShuffle.first</span>
+<span class="fc" id="L143">        val aiTournament = speedTournamentShuffle.second</span>
+<span class="fc" id="L144">        val shuffleTiles = speedTournamentShuffle.third</span>
+
+
+<span class="fc bfc" id="L147" title="All 4 branches covered.">        check(rootService.novaluna.game == null) { &quot;There is already a currently active game.&quot;}</span>
+<span class="fc bfc" id="L148" title="All 6 branches covered.">        require(players.size in 2..4) {&quot;Number of players to be created is not between 2 and 4.&quot;}</span>
+<span class="pc bpc" id="L149" title="2 of 8 branches missed.">        require(startingTokens == 21 || startingTokens == 18 || startingTokens == 16) {</span>
+<span class="nc" id="L150">            &quot;Illegal value for starting tokens.&quot;</span>
+        }
+<span class="fc bfc" id="L152" title="All 4 branches covered.">        require(aiSpeed &gt;= 0) {&quot;aiSpeed is negative.&quot;}</span>
+<span class="pc bpc" id="L153" title="2 of 6 branches missed.">        require(!(aiTournament &amp;&amp; shuffleTiles)) {&quot;The boolean flags aiTournament and shuffleTiles are both true.&quot;}</span>
+
+        // Create the players.
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        val createdPlayers = MutableList(players.size){</span>
+<span class="fc" id="L157">            val currentTriple = players[it]</span>
+<span class="fc" id="L158">            Player(currentTriple.first,currentTriple.second,currentTriple.third,startingTokens)</span>
+        }
+
+        // Create the tiles and shuffle them, if shuffleTiles is true.
+<span class="fc" id="L162">        rootService.ioService.CSV_FILE = gameConfigFile</span>
+<span class="fc" id="L163">        val tiles = rootService.ioService.csvToTiles()</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if(shuffleTiles){</span>
+<span class="fc" id="L165">            tiles.shuffle(random)</span>
+        }
+
+        // Create the list of states. This list only contains the initial state.
+        // Note that in this initial state the moonwheel still needs to be filled.
+<span class="fc" id="L170">        val states = mutableListOf(createInitialState(tiles,createdPlayers))</span>
+
+        // Create a game with the fitting parameters. In particular, choseUndo is false.
+<span class="fc" id="L173">        rootService.novaluna.game = Game(states[0], aiTournament, String(), false, aiSpeed, states)</span>
+
+        // Refill the tiles of the moonwheel using the method of PlayerActionService
+<span class="fc" id="L176">        rootService.playerActionService.refillTiles()</span>
+        
+        // Simulate the placing of the tokens on the moonwheel by reducing the token number of each player by 1
+<span class="fc" id="L179">        val currentGame = rootService.novaluna.game</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        checkNotNull(currentGame)</span>
+<span class="fc" id="L181">        currentGame.states[0].players.forEach {</span>
+<span class="fc" id="L182">            it.tokens--</span>
+<span class="fc" id="L183">        }</span>
+<span class="fc" id="L184">        onAllRefreshables { refreshAfterStartNewGame() }</span>
+
+<span class="fc" id="L186">        rootService.ioService.PROTOCOL_FILE.writeText(&quot;&quot;)</span>
+<span class="fc" id="L187">    }</span>
+
+    /**
+     * Helper-method to create the initial state given players and tiles.
+     *
+     * Initialization means:
+     * The players, the current player and the tile stack are set an the moon-meeple is placed.
+     * The moonwheel is not yet filled.
+     */
+    private fun createInitialState(stack: MutableList&lt;Tile&gt;, players: MutableList&lt;Player&gt;): State{
+<span class="fc" id="L197">        val state = State(stack, Moonwheel(), players[0], players, &quot;&quot;)</span>
+<span class="fc" id="L198">        state.moonwheel.apply {</span>
+            // It is important that the list at playerPositions[0] is not the same list as players but a shallow copy.
+            // Thus, with mutableList a shallow copy (different list, same players) is created.
+<span class="fc" id="L201">            playerPositions[0] = players.toMutableList()</span>
+<span class="fc" id="L202">            tiles[0] = createMoonMeeple()</span>
+<span class="fc" id="L203">        }</span>
+<span class="fc" id="L204">        return state</span>
+    }
+
+    /**
+     * Helper-method to create the moon-meeple.
+     */
+    private fun createMoonMeeple(): Tile{
+<span class="fc" id="L211">        return Tile(</span>
+<span class="fc" id="L212">            Type.MEEPLE,Cost.ZERO, mutableListOf(),69</span>
+        )
+    }
+
+    /**
+     * Makes the necessary steps after a [Player]'s moved is finished. Works on [currentState].
+     *
+     * NOTE: Throws an exception, if the state already satisfies an endGameCondition.
+     *
+     * @exception IllegalArgumentException [currentState] satisfies an endGameCondition (see [endGameConditionReached]).
+     */
+    private fun manipulateStateEndMove(currentState: State){
+        // Check that currentState does not satisfy a game ending condition.
+<span class="pc bpc" id="L225" title="2 of 4 branches missed.">        require(!endGameConditionReached(currentState))</span>
+
+        // Refill the moonwheel if necessary
+<span class="fc bfc" id="L228" title="All 4 branches covered.">        if(currentState.moonwheel.tiles.count { Type.shortType().contains(it.type) } == 0){</span>
+<span class="fc" id="L229">            rootService.playerActionService.refillTiles(currentState)</span>
+        }
+
+        //Advance the current player
+<span class="fc" id="L233">        advanceCurrentPlayer(currentState)</span>
+<span class="fc" id="L234">    }</span>
+
+    /**
+     * Makes the necessary steps after a [Player]'s moved is finished. Works on the current [Game].
+     *
+     * Checks if a game-ending conidition is reached. If this is the case, the respective method is called. If not, the
+     * [Moonwheel] is refilled if necessary and the current player is advanced. This is done by calling
+     * [manipulateStateEndMove].
+     *
+     * @exception IllegalStateException There is no currently active game.
+     */
+    fun endMove(){
+<span class="fc" id="L246">        val currentGame = rootService.novaluna.game</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        checkNotNull(currentGame){ &quot;There is no currently active game.&quot;}</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if( endGameConditionReached(currentGame.currentState) ){</span>
+<span class="fc" id="L249">            endGame()</span>
+        }else{
+<span class="fc" id="L251">            manipulateStateEndMove(currentGame.currentState)</span>
+
+            // Call the refreshables.
+<span class="fc" id="L254">            onAllRefreshables { refreshAfterEndMove() }</span>
+        }
+<span class="fc" id="L256">    }</span>
+
+    /**
+     * Checks whether a condition to end the game is reached. Check is done on [currentState].
+     *
+     * This is the case if and only if
+     * (1) the current player has 0 tokens or
+     * (2) the moonwheel needs to be refilled (contains 0 coloured tiles) and the stack is empty.
+     *
+     * @param currentState [State] for which the conditions are checked.
+     * @return True if a condition to end the game is reached. Else false.
+     */
+    fun endGameConditionReached(currentState: State): Boolean{
+        // Get the current player and the moonwheel and stack.
+<span class="fc" id="L270">        val currentPlayer = currentState.currentPlayer</span>
+<span class="fc" id="L271">        val moonwheel = currentState.moonwheel</span>
+<span class="fc" id="L272">        val stack = currentState.stack</span>
+
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        return currentPlayer.tokens == 0 ||</span>
+<span class="fc bfc" id="L275" title="All 4 branches covered.">                ( moonwheel.tiles.count { Type.shortType().contains(it.type) } == 0 &amp;&amp; stack.isEmpty() )</span>
+    }
+
+    /**
+     * Calculates the next player from the current situation on the moonwheel and advances currentState.currentPlayer
+     * accordingly. Manipulation done on [currentState].
+     *
+     * Does not check, whether an endGameCondition is already reached. Thus, this method works on a [State] that already
+     * satisfies an endGameCondition without throwing an exception. To prevent this, use [endGameConditionReached]
+     * before calling this method.
+     *
+     * @param currentState State to be manipulated.
+     * @exception IllegalStateException The [Moonwheel] is inconsistent with regard to the current player.
+     */
+    fun advanceCurrentPlayer(currentState: State){
+        // Get the current player and the moonwheel.
+<span class="fc" id="L291">        val currentPlayer = currentState.currentPlayer</span>
+<span class="fc" id="L292">        val moonwheel = currentState.moonwheel</span>
+
+        // Get all the occurrences of currentPlayer. Check that he occurres only once and that he's the first player
+        // in his list.
+<span class="fc" id="L296">        val currentPlayerOccurences = moonwheel.playerPositions.filter { playerList -&gt;</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">            playerList.contains(currentPlayer)</span>
+        }
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        check(</span>
+<span class="pc bpc" id="L300" title="3 of 8 branches missed.">            currentPlayerOccurences.size == 1 &amp;&amp; currentPlayerOccurences[0].count { it == currentPlayer } == 1</span>
+<span class="nc" id="L301">        ) { &quot;Error: currentPlayer occurres more than once on the wheel.&quot; }</span>
+
+        // Get the current position. Because of the checks above, the value is definitely in 0..23 (and not -1).
+<span class="fc" id="L304">        val positionCurrentPlayer = moonwheel.playerPositions.indexOf(currentPlayerOccurences[0])</span>
+
+        /* Get the next current player.
+        The next current player is the first player in the first not-empty list that is found when going forward 17
+        positions (or backward 7 positions) from positionCurrentPlayer and then advancing to this position.
+        Note that if no such list is found before again reaching positionCurrentPlayer, then the currentPlayer stays
+        the same.
+         */
+<span class="fc" id="L312">        var currentPlayerChanged = false</span>
+<span class="fc" id="L313">        var i = (positionCurrentPlayer + 17) % 24</span>
+<span class="fc bfc" id="L314" title="All 4 branches covered.">        while (!currentPlayerChanged &amp;&amp; i != positionCurrentPlayer){</span>
+<span class="fc bfc" id="L315" title="All 4 branches covered.">            if(moonwheel.playerPositions[i].isNotEmpty()){</span>
+<span class="fc" id="L316">                currentState.currentPlayer = moonwheel.playerPositions[i][0]</span>
+<span class="fc" id="L317">                currentPlayerChanged = true</span>
+            }else{
+<span class="fc" id="L319">                i = (i+1) % 24</span>
+            }
+        }
+<span class="fc" id="L322">    }</span>
+
+    /**
+     * Method to end the current [Game].
+     *
+     * Activates the refreshables.
+     * It also determines the winner and saves him to the HIGHSCORE_FILE
+     *
+     * @exception IllegalStateException There is no currently active game.
+     */
+    private fun endGame(){
+<span class="fc" id="L333">        val currentGame = rootService.novaluna.game</span>
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">        checkNotNull(currentGame)</span>
+<span class="fc" id="L335">        val winner : Pair&lt;String,Double&gt; = rootService.aiService.highScore(currentGame)</span>
+<span class="fc" id="L336">        val highScore = Score(winner.second,winner.first)</span>
+<span class="fc" id="L337">        rootService.novaluna.highscores.add(highScore)</span>
+<span class="fc" id="L338">        rootService.ioService.saveHighscore()</span>
+<span class="fc" id="L339">        rootService.ioService.saveProtocol()</span>
+<span class="fc" id="L340">        onAllRefreshables { refreshAfterEndGame() }</span>
+<span class="fc" id="L341">    }</span>
+
+    /**
+     * Sets the current [Game] (i.e. novaluna.game) to null.
+     *
+     * It is not checked, whether there is a currently active game or not.
+     */
+    fun reset(){
+<span class="fc" id="L349">        rootService.novaluna.game = null</span>
+<span class="fc" id="L350">        onAllRefreshables { refreshAfterReset() }</span>
+<span class="fc" id="L351">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>detekt report</title>
+    <style>
+h2 {
+  background-color: #666666;
+  padding: 0.2em;
+  color: #ffffff;
+}
+h3 {
+  background-color:#f8dfdf;
+  padding:0.5em;
+}
+.rule {
+  background-color: #dddddd;
+  padding: 0.3em;
+  font-weight: bold;
+}
+.description {
+  color:#000000;
+  padding:0.3em;
+}
+.location {
+  color: #690505;
+  font-family: monospace;
+  display: block;
+}
+.message {
+  font-size: 0.8em;
+  color: #444444;
+  display: block;
+  margin-top: 1pt;
+}
+.rule-container {
+  border: 0.1em dashed #dddddd;
+  padding: 0.1em;
+  line-height: 1.5em;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+pre {
+  border: 1px solid #e0e0e0;
+  overflow: scroll;
+}
+.lineno {
+  color: #999999;
+  background-color: #f0f0f0;
+}
+.error {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AwCFR4T/3uLMgAAADxJREFUCNdNyLERQEAABMCjL4lQwIzcjErpguAL+C9AvgKJDbeD/PRpLdm35Hm+MU+cB+tCKaJW4L4YBy+CAiLJrFs9mgAAAABJRU5ErkJggg==) bottom repeat-x;
+}
+.exception {
+  color: #b60808;
+  display: inline-block;
+  background-color: #ecdada;
+  border-color: #b60808;
+  border-radius: 10px;
+  border: solid 2px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 16px;
+}
+</style>
+</head>
+<body>
+
+<h1>detekt report</h1>
+
+<h2>Metrics</h2>
+
+<div>
+  <ul>
+    <li>1,149 number of properties</li>
+    <li>245 number of functions</li>
+    <li>67 number of classes</li>
+    <li>4 number of packages</li>
+    <li>46 number of kt files</li>
+  </ul>
+</div>
+
+
+<h2>Complexity Report</h2>
+
+<div>
+  <ul>
+    <li>9,607 lines of code (loc)</li>
+    <li>6,454 source lines of code (sloc)</li>
+    <li>5,142 logical lines of code (lloc)</li>
+    <li>1,759 comment lines of code (cloc)</li>
+    <li>796 cyclomatic complexity (mcc)</li>
+    <li>574 cognitive complexity</li>
+    <li>91 number of total code smells</li>
+    <li>27% comment source ratio</li>
+    <li>154 mcc per 1,000 lloc</li>
+    <li>17 code smells per 1,000 lloc</li>
+  </ul>
+</div>
+
+
+<h2>Findings</h2>
+<div>Total: 91
+  <h3>comments: 14</h3>
+  <details id="UndocumentedPublicClass" open="open">
+    <summary class="rule-container"><span class="rule">UndocumentedPublicClass: 1 </span><span class="description">Public classes, interfaces and objects require documentation.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:17:7</span><span class="message">NewAITournamentScene is missing required documentation.</span>
+        <pre><code><span class="lineno">  14 </span>import tools.aqua.bgw.visual.ImageVisual
+<span class="lineno">  15 </span>import java.awt.Color
+<span class="lineno">  16 </span>
+<span class="lineno">  17 </span>class <span class="error">NewAITournamentScene</span>(private val rootService: RootService) : MenuScene(1920, 1080), Refreshable {
+<span class="lineno">  18 </span> var playerList = mutableListOf&lt;Triple&lt;String, PlayerColour, PlayerType&gt;&gt;()
+<span class="lineno">  19 </span>    private var players=0
+<span class="lineno">  20 </span>    private var aiPlayerState =&quot;aiplayer&quot;
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="UndocumentedPublicFunction" open="open">
+    <summary class="rule-container"><span class="rule">UndocumentedPublicFunction: 13 </span><span class="description">Public functions require documentation.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:382:9</span><span class="message">The function addPlayers is missing documentation.</span>
+        <pre><code><span class="lineno"> 379 </span>    }
+<span class="lineno"> 380 </span>
+<span class="lineno"> 381 </span>    //Makes it so that UI elements for all partaking players are made visible
+<span class="lineno"> 382 </span>    fun <span class="error">addPlayers</span>() {
+<span class="lineno"> 383 </span>        val currentGame = rootService.novaluna
+<span class="lineno"> 384 </span>        checkNotNull(currentGame)
+<span class="lineno"> 385 </span>        val game = currentGame.game
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:548:9</span><span class="message">The function UndoMove is missing documentation.</span>
+        <pre><code><span class="lineno"> 545 </span>    }
+<span class="lineno"> 546 </span>
+<span class="lineno"> 547 </span>
+<span class="lineno"> 548 </span>    fun <span class="error">UndoMove</span>() {
+<span class="lineno"> 549 </span>        val currentGame: Game? = rootService.novaluna.game
+<span class="lineno"> 550 </span>        checkNotNull(currentGame)
+<span class="lineno"> 551 </span>        val currentPlayer = currentGame!!.currentState.currentPlayer
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:578:9</span><span class="message">The function redoMove is missing documentation.</span>
+        <pre><code><span class="lineno"> 575 </span>
+<span class="lineno"> 576 </span>    }
+<span class="lineno"> 577 </span>
+<span class="lineno"> 578 </span>    fun <span class="error">redoMove</span>() {
+<span class="lineno"> 579 </span>        val currentGame: Game? = rootService.novaluna.game
+<span class="lineno"> 580 </span>        checkNotNull(currentGame)
+<span class="lineno"> 581 </span>        val currentPlayer = currentGame!!.currentState.currentPlayer
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:710:9</span><span class="message">The function checkTileIsNotEmpty is missing documentation.</span>
+        <pre><code><span class="lineno"> 707 </span>        }
+<span class="lineno"> 708 </span>    }
+<span class="lineno"> 709 </span>
+<span class="lineno"> 710 </span>    fun <span class="error">checkTileIsNotEmpty</span>() : Int
+<span class="lineno"> 711 </span>    {
+<span class="lineno"> 712 </span>        var count =0
+<span class="lineno"> 713 </span>        if (!(rootService.novaluna.game!!.currentState.moonwheel.tiles.isEmpty()))
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/GameFinishedMenuScene.kt:267:9</span><span class="message">The function reset is missing documentation.</span>
+        <pre><code><span class="lineno"> 264 </span>    }
+<span class="lineno"> 265 </span>
+<span class="lineno"> 266 </span>
+<span class="lineno"> 267 </span>    fun <span class="error">reset</span>()
+<span class="lineno"> 268 </span>    {
+<span class="lineno"> 269 </span>        firstPlayerLabel.text=&quot;&quot;
+<span class="lineno"> 270 </span>        secondPlayerLabel.text=&quot;&quot;
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/GameScene.kt:708:9</span><span class="message">The function reset is missing documentation.</span>
+        <pre><code><span class="lineno"> 705 </span>
+<span class="lineno"> 706 </span>    }
+<span class="lineno"> 707 </span>
+<span class="lineno"> 708 </span>    fun <span class="error">reset</span>() {
+<span class="lineno"> 709 </span>        player4TokensLabel.text = &quot;&quot;
+<span class="lineno"> 710 </span>        player3TokensLabel.text = &quot;&quot;
+<span class="lineno"> 711 </span>        player2TokensLabel.text = &quot;&quot;
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/GameScene.kt:764:9</span><span class="message">The function resetAfterDo1 is missing documentation.</span>
+        <pre><code><span class="lineno"> 761 </span>
+<span class="lineno"> 762 </span>    }
+<span class="lineno"> 763 </span>
+<span class="lineno"> 764 </span>    fun <span class="error">resetAfterDo1</span>()
+<span class="lineno"> 765 </span>    {
+<span class="lineno"> 766 </span>
+<span class="lineno"> 767 </span>        tokenPos0.clear()
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:302:9</span><span class="message">The function reset is missing documentation.</span>
+        <pre><code><span class="lineno"> 299 </span>
+<span class="lineno"> 300 </span>    }
+<span class="lineno"> 301 </span>
+<span class="lineno"> 302 </span>    fun <span class="error">reset</span>()
+<span class="lineno"> 303 </span>    {
+<span class="lineno"> 304 </span>        humanColor.selectedItem=null
+<span class="lineno"> 305 </span>        humanConfirmButton.isDisabled=true
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:418:9</span><span class="message">The function orderofColor is missing documentation.</span>
+        <pre><code><span class="lineno"> 415 </span>        playerList.remove(Triple(name.text, color.selectedItem, diff))
+<span class="lineno"> 416 </span>    }
+<span class="lineno"> 417 </span>
+<span class="lineno"> 418 </span>    fun <span class="error">orderofColor</span>()  : Boolean{
+<span class="lineno"> 419 </span>
+<span class="lineno"> 420 </span>            if (aiColor.selectedItem?.equals(humanColor.selectedItem) == true) {
+<span class="lineno"> 421 </span>                startButton.isDisabled = true
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:741:9</span><span class="message">The function reset is missing documentation.</span>
+        <pre><code><span class="lineno"> 738 </span>
+<span class="lineno"> 739 </span>    }
+<span class="lineno"> 740 </span>
+<span class="lineno"> 741 </span>    fun <span class="error">reset</span>()
+<span class="lineno"> 742 </span>    {
+<span class="lineno"> 743 </span>        player1Name.text=&quot;&quot;
+<span class="lineno"> 744 </span>        player2Name.text=&quot;&quot;
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:793:9</span><span class="message">The function checkNames is missing documentation.</span>
+        <pre><code><span class="lineno"> 790 </span>
+<span class="lineno"> 791 </span>    }
+<span class="lineno"> 792 </span>
+<span class="lineno"> 793 </span>    fun <span class="error">checkNames</span>() : Boolean
+<span class="lineno"> 794 </span>    {
+<span class="lineno"> 795 </span>        if (players==2)
+<span class="lineno"> 796 </span>        {
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:831:9</span><span class="message">The function orderofColor is missing documentation.</span>
+        <pre><code><span class="lineno"> 828 </span>        return false
+<span class="lineno"> 829 </span>    }
+<span class="lineno"> 830 </span>
+<span class="lineno"> 831 </span>    fun <span class="error">orderofColor</span>() : Boolean {
+<span class="lineno"> 832 </span>        if (players == 2) {
+<span class="lineno"> 833 </span>            if (player1Color.selectedItem?.equals(player2Color.selectedItem) == true) {
+<span class="lineno"> 834 </span>                return true
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:864:9</span><span class="message">The function checkDifficulty is missing documentation.</span>
+        <pre><code><span class="lineno"> 861 </span>        return false
+<span class="lineno"> 862 </span>    }
+<span class="lineno"> 863 </span>
+<span class="lineno"> 864 </span>    fun <span class="error">checkDifficulty</span>() : Boolean
+<span class="lineno"> 865 </span>    {
+<span class="lineno"> 866 </span>        if (players==2)
+<span class="lineno"> 867 </span>        {
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <h3>complexity: 38</h3>
+  <details id="ComplexCondition" open="open">
+    <summary class="rule-container"><span class="rule">ComplexCondition: 6 </span><span class="description">Complex conditions should be simplified and extracted into well-named methods if necessary.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:340:13</span><span class="message">This condition is too complex (5). Defined complexity threshold for conditions is set to '4'</span>
+        <pre><code><span class="lineno"> 337 </span>        color: ComboBox&lt;PlayerColour&gt;,
+<span class="lineno"> 338 </span>        difficulty: ComboBox&lt;PlayerType&gt;
+<span class="lineno"> 339 </span>    ) {
+<span class="lineno"> 340 </span>        if (<span class="error">name.text != &quot;&quot; &amp;&amp; color.selectedItem != null &amp;&amp; (difficulty.selectedItem != null &amp;&amp; !difficulty.isDisabled || difficulty.isDisabled)</span>) {
+<span class="lineno"> 341 </span>            var diff = difficulty.selectedItem
+<span class="lineno"> 342 </span>            conf.visual = ImageVisual(&quot;ConfirmButton.png&quot;)
+<span class="lineno"> 343 </span>            conf.text = &quot;BEREIT!&quot;
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:632:13</span><span class="message">This condition is too complex (5). Defined complexity threshold for conditions is set to '4'</span>
+        <pre><code><span class="lineno"> 629 </span>        color: ComboBox&lt;PlayerColour&gt;,
+<span class="lineno"> 630 </span>        difficulty: ComboBox&lt;PlayerType&gt;
+<span class="lineno"> 631 </span>    ) {
+<span class="lineno"> 632 </span>        if (<span class="error">name.text != &quot;&quot; &amp;&amp; color.selectedItem != null &amp;&amp; (difficulty.selectedItem != null &amp;&amp; !difficulty.isDisabled || difficulty.isDisabled)</span>) {
+<span class="lineno"> 633 </span>            var diff = difficulty.selectedItem
+<span class="lineno"> 634 </span>            conf.visual = ImageVisual(&quot;ConfirmButton.png&quot;)
+<span class="lineno"> 635 </span>            conf.text = &quot;BEREIT!&quot;
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:817:17</span><span class="message">This condition is too complex (6). Defined complexity threshold for conditions is set to '4'</span>
+        <pre><code><span class="lineno"> 814 </span>
+<span class="lineno"> 815 </span>        else if (players == 4)
+<span class="lineno"> 816 </span>        {
+<span class="lineno"> 817 </span>            if (<span class="error">(player1Name.text == player2Name.text || player1Name.text == player3Name.text</span>
+<span class="lineno"> 818 </span><span class="error">                        || player2Name.text == player3Name.text) ||</span>
+<span class="lineno"> 819 </span><span class="error">                player1Name.text == player4Name.text || player2Name.text== player4Name.text ||</span>
+<span class="lineno"> 820 </span><span class="error">                player3Name.text == player4Name.text</span>)
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:850:17</span><span class="message">This condition is too complex (6). Defined complexity threshold for conditions is set to '4'</span>
+        <pre><code><span class="lineno"> 847 </span>            }
+<span class="lineno"> 848 </span>
+<span class="lineno"> 849 </span>        } else if (players == 4) {
+<span class="lineno"> 850 </span>            if (<span class="error">player1Color.selectedItem?.equals(player2Color.selectedItem) == true ||</span>
+<span class="lineno"> 851 </span><span class="error">                player1Color.selectedItem?.equals(player3Color.selectedItem) == true</span>
+<span class="lineno"> 852 </span><span class="error">                || player2Color.selectedItem?.equals(player3Color.selectedItem) == true</span>
+<span class="lineno"> 853 </span><span class="error">                || player1Color.selectedItem?.equals(player4Color.selectedItem) == true</span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:878:17</span><span class="message">This condition is too complex (9). Defined complexity threshold for conditions is set to '4'</span>
+        <pre><code><span class="lineno"> 875 </span>        }
+<span class="lineno"> 876 </span>        else if (players==3) {
+<span class="lineno"> 877 </span>            if (
+<span class="lineno"> 878 </span>                <span class="error">playerOneButtonState == &quot;aiplayer&quot; &amp;&amp; playerTwoButtonState == &quot;aiplayer&quot; &amp;&amp;</span>
+<span class="lineno"> 879 </span><span class="error">                player1Difficulty.selectedItem?.equals(player2Difficulty.selectedItem) == false ||</span>
+<span class="lineno"> 880 </span><span class="error"></span>
+<span class="lineno"> 881 </span><span class="error">                playerOneButtonState == &quot;aiplayer&quot; &amp;&amp; playerThreeButtonState == &quot;aiplayer&quot; &amp;&amp;</span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:895:17</span><span class="message">This condition is too complex (18). Defined complexity threshold for conditions is set to '4'</span>
+        <pre><code><span class="lineno"> 892 </span>        }
+<span class="lineno"> 893 </span>        else if (players == 4)
+<span class="lineno"> 894 </span>        {
+<span class="lineno"> 895 </span>            if (<span class="error">playerOneButtonState == &quot;aiplayer&quot; &amp;&amp; playerTwoButtonState == &quot;aiplayer&quot; &amp;&amp;</span>
+<span class="lineno"> 896 </span><span class="error">                player1Difficulty.selectedItem?.equals(player2Difficulty.selectedItem) == false</span>
+<span class="lineno"> 897 </span><span class="error">                ||</span>
+<span class="lineno"> 898 </span><span class="error">                playerOneButtonState == &quot;aiplayer&quot; &amp;&amp; playerThreeButtonState == &quot;aiplayer&quot; &amp;&amp;</span>
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="ComplexMethod" open="open">
+    <summary class="rule-container"><span class="rule">ComplexMethod: 6 </span><span class="description">Prefer splitting up complex methods into smaller, easier to understand methods.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:112:9</span><span class="message">The function highScore appears to be too complex (18). Defined complexity threshold for methods is set to '15'</span>
+        <pre><code><span class="lineno"> 109 </span>     * case 2: if [Player] has requested a tip then only his tokens will not be used for the calculation
+<span class="lineno"> 110 </span>     * of average score
+<span class="lineno"> 111 </span>     */
+<span class="lineno"> 112 </span>    fun <span class="error">highScore</span>(game: Game):Pair&lt;String,Double&gt;{
+<span class="lineno"> 113 </span>
+<span class="lineno"> 114 </span>        var scoreAndPlayer: Pair&lt;String,Double&gt; = Pair(&quot;&quot;,0.0)
+<span class="lineno"> 115 </span>        var haveWinner = false
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:243:9</span><span class="message">The function evaluateNextTurn appears to be too complex (16). Defined complexity threshold for methods is set to '15'</span>
+        <pre><code><span class="lineno"> 240 </span>     * this [Tile] on this position
+<span class="lineno"> 241 </span>     */
+<span class="lineno"> 242 </span>
+<span class="lineno"> 243 </span>    fun <span class="error">evaluateNextTurn</span>(state : State,player : Player) : Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; {
+<span class="lineno"> 244 </span>
+<span class="lineno"> 245 </span>        var anzahlmin =0
+<span class="lineno"> 246 </span>        var anzahlmax =0
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:356:9</span><span class="message">The function minimax appears to be too complex (20). Defined complexity threshold for methods is set to '15'</span>
+        <pre><code><span class="lineno"> 353 </span>     * supposed to be maximum for AI player and minimum for human player
+<span class="lineno"> 354 </span>     */
+<span class="lineno"> 355 </span>
+<span class="lineno"> 356 </span>    fun <span class="error">minimax</span>(state: State, depth: Int, alpha:Int ,
+<span class="lineno"> 357 </span>                beta:Int, aiplayer: Boolean ) : Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; {
+<span class="lineno"> 358 </span>
+<span class="lineno"> 359 </span>        val getValidTiles: MutableList&lt;Tile&gt; = getValidTiles(state) // die 3 mögliche Tiles
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:416:17</span><span class="message">The function makeMove appears to be too complex (23). Defined complexity threshold for methods is set to '15'</span>
+        <pre><code><span class="lineno"> 413 </span>    }
+<span class="lineno"> 414 </span>
+<span class="lineno"> 415 </span>    //Fulfills a makeMove cycle
+<span class="lineno"> 416 </span>    private fun <span class="error">makeMove</span>(currentPlayer: Player) {
+<span class="lineno"> 417 </span>        refreshPlayerGridMap()
+<span class="lineno"> 418 </span>        val state = rootService.novaluna.game?.currentState
+<span class="lineno"> 419 </span>        checkNotNull(state)
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/GameFinishedMenuScene.kt:208:23</span><span class="message">The function gameResultString appears to be too complex (15). Defined complexity threshold for methods is set to '15'</span>
+        <pre><code><span class="lineno"> 205 </span>        )
+<span class="lineno"> 206 </span>    }
+<span class="lineno"> 207 </span>
+<span class="lineno"> 208 </span>    private fun State.<span class="error">gameResultString</span>(): String {
+<span class="lineno"> 209 </span>        val p1Score = players.first().tokens
+<span class="lineno"> 210 </span>        val p2Score = players.component2().tokens
+<span class="lineno"> 211 </span>        var p3Score= 0
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:864:9</span><span class="message">The function checkDifficulty appears to be too complex (34). Defined complexity threshold for methods is set to '15'</span>
+        <pre><code><span class="lineno"> 861 </span>        return false
+<span class="lineno"> 862 </span>    }
+<span class="lineno"> 863 </span>
+<span class="lineno"> 864 </span>    fun <span class="error">checkDifficulty</span>() : Boolean
+<span class="lineno"> 865 </span>    {
+<span class="lineno"> 866 </span>        if (players==2)
+<span class="lineno"> 867 </span>        {
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="LargeClass" open="open">
+    <summary class="rule-container"><span class="rule">LargeClass: 3 </span><span class="description">One class should have one responsibility. Large classes tend to handle many things at once. Split up large classes into smaller classes that are easier to understand.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:21:7</span><span class="message">Class Application is too large. Consider splitting it into smaller pieces.</span>
+        <pre><code><span class="lineno">  18 </span>/**
+<span class="lineno">  19 </span> * The main class of the view layer, connecting all other scenes.
+<span class="lineno">  20 </span> */
+<span class="lineno">  21 </span>class <span class="error">Application</span> : BoardGameApplication(&quot;Nova Luna&quot;), Refreshable {
+<span class="lineno">  22 </span>
+<span class="lineno">  23 </span>
+<span class="lineno">  24 </span>    val rootService = RootService(Novaluna(mutableListOf(), null))
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/GameScene.kt:21:7</span><span class="message">Class GameScene is too large. Consider splitting it into smaller pieces.</span>
+        <pre><code><span class="lineno">  18 </span>/**
+<span class="lineno">  19 </span> * The Game itself.
+<span class="lineno">  20 </span> */
+<span class="lineno">  21 </span>class <span class="error">GameScene</span>(private val rootService: RootService) : BoardGameScene(1920, 1082), Refreshable {
+<span class="lineno">  22 </span>    val backButton = Button(
+<span class="lineno">  23 </span>        width = 65, height = 65,
+<span class="lineno">  24 </span>        posX = 30, posY = 30
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:18:7</span><span class="message">Class NewGameMenuScene is too large. Consider splitting it into smaller pieces.</span>
+        <pre><code><span class="lineno">  15 </span>/**
+<span class="lineno">  16 </span> * Scene to adjust game settings. Number of Players, Playernames, AI difficulty, etc.
+<span class="lineno">  17 </span> */
+<span class="lineno">  18 </span>class <span class="error">NewGameMenuScene</span>(private val rootService: RootService) : MenuScene(1920, 1080), Refreshable {
+<span class="lineno">  19 </span>
+<span class="lineno">  20 </span>    private var players = 0
+<span class="lineno">  21 </span>    private var readyPlayersChosen = 0
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="LongMethod" open="open">
+    <summary class="rule-container"><span class="rule">LongMethod: 5 </span><span class="description">One method should have one responsibility. Long methods tend to handle many things at once. Prefer smaller methods to make them easier to understand.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:356:9</span><span class="message">The function minimax is too long (67). The maximum length is 60.</span>
+        <pre><code><span class="lineno"> 353 </span>     * supposed to be maximum for AI player and minimum for human player
+<span class="lineno"> 354 </span>     */
+<span class="lineno"> 355 </span>
+<span class="lineno"> 356 </span>    fun <span class="error">minimax</span>(state: State, depth: Int, alpha:Int ,
+<span class="lineno"> 357 </span>                beta:Int, aiplayer: Boolean ) : Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; {
+<span class="lineno"> 358 </span>
+<span class="lineno"> 359 </span>        val getValidTiles: MutableList&lt;Tile&gt; = getValidTiles(state) // die 3 mögliche Tiles
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:416:17</span><span class="message">The function makeMove is too long (85). The maximum length is 60.</span>
+        <pre><code><span class="lineno"> 413 </span>    }
+<span class="lineno"> 414 </span>
+<span class="lineno"> 415 </span>    //Fulfills a makeMove cycle
+<span class="lineno"> 416 </span>    private fun <span class="error">makeMove</span>(currentPlayer: Player) {
+<span class="lineno"> 417 </span>        refreshPlayerGridMap()
+<span class="lineno"> 418 </span>        val state = rootService.novaluna.game?.currentState
+<span class="lineno"> 419 </span>        checkNotNull(state)
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/GameServiceTest.kt:30:9</span><span class="message">The function startNewGameCaseOne is too long (61). The maximum length is 60.</span>
+        <pre><code><span class="lineno">  27 </span>     * Tests if a game is created correctly if all parameters are set accordingly.
+<span class="lineno">  28 </span>     */
+<span class="lineno">  29 </span>    @Test
+<span class="lineno">  30 </span>    fun <span class="error">startNewGameCaseOne</span>(){
+<span class="lineno">  31 </span>        val testRefreshable = RefreshableTest()
+<span class="lineno">  32 </span>        rootService.addRefreshable(testRefreshable)
+<span class="lineno">  33 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/GameServiceTest.kt:238:9</span><span class="message">The function startNewAITournamentOnlyCase is too long (63). The maximum length is 60.</span>
+        <pre><code><span class="lineno"> 235 </span>     * and whether the flags are correct.
+<span class="lineno"> 236 </span>     */
+<span class="lineno"> 237 </span>    @Test
+<span class="lineno"> 238 </span>    fun <span class="error">startNewAITournamentOnlyCase</span>(){
+<span class="lineno"> 239 </span>        val testRefreshable = RefreshableTest()
+<span class="lineno"> 240 </span>        rootService.addRefreshable(testRefreshable)
+<span class="lineno"> 241 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveTaskEvaluationTilePlacementTest.kt:111:9</span><span class="message">The function makeMoveTaskEvaluation2 is too long (67). The maximum length is 60.</span>
+        <pre><code><span class="lineno"> 108 </span>     * evaluation.
+<span class="lineno"> 109 </span>     */
+<span class="lineno"> 110 </span>    @Test
+<span class="lineno"> 111 </span>    fun <span class="error">makeMoveTaskEvaluation2</span>(){
+<span class="lineno"> 112 </span>        val testRefreshable = RefreshableTest()
+<span class="lineno"> 113 </span>        rootService.addRefreshable(testRefreshable)
+<span class="lineno"> 114 </span>
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="LongParameterList" open="open">
+    <summary class="rule-container"><span class="rule">LongParameterList: 5 </span><span class="description">The more parameters a function has the more complex it is. Long parameter lists are often used to control complex algorithms and violate the Single Responsibility Principle. Prefer functions with short parameter lists.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:316:33</span><span class="message">The function confirmBehaviour(conf: Button, playerButton: Button, name: TextField, color: ComboBox&lt;PlayerColour&gt;, difficulty: ComboBox&lt;PlayerType&gt;, state: String) has too many parameters. The current threshold is set to 6.</span>
+        <pre><code><span class="lineno"> 313 </span>        aiName.text=&quot;&quot;
+<span class="lineno"> 314 </span>    }
+<span class="lineno"> 315 </span>
+<span class="lineno"> 316 </span>    private fun confirmBehaviour<span class="error">(</span>
+<span class="lineno"> 317 </span><span class="error">        conf: Button,</span>
+<span class="lineno"> 318 </span><span class="error">        playerButton: Button,</span>
+<span class="lineno"> 319 </span><span class="error">        name: TextField,</span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:390:26</span><span class="message">The function unconfirm(conf: Button, playerButton: Button, name: TextField, color: ComboBox&lt;PlayerColour&gt;, difficulty: ComboBox&lt;PlayerType&gt;, state: String) has too many parameters. The current threshold is set to 6.</span>
+        <pre><code><span class="lineno"> 387 </span>        }
+<span class="lineno"> 388 </span>    }
+<span class="lineno"> 389 </span>
+<span class="lineno"> 390 </span>    private fun unconfirm<span class="error">(</span>
+<span class="lineno"> 391 </span><span class="error">        conf: Button,</span>
+<span class="lineno"> 392 </span><span class="error">        playerButton: Button,</span>
+<span class="lineno"> 393 </span><span class="error">        name: TextField,</span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:512:34</span><span class="message">The function changePlayerState(player: String, playerButton: Button, nameField: TextField, colorBox: ComboBox&lt;PlayerColour&gt;, diffBox: ComboBox&lt;PlayerType&gt;, conf: Button) has too many parameters. The current threshold is set to 6.</span>
+        <pre><code><span class="lineno"> 509 </span>    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<span class="lineno"> 510 </span>
+<span class="lineno"> 511 </span>
+<span class="lineno"> 512 </span>    private fun changePlayerState<span class="error">(</span>
+<span class="lineno"> 513 </span><span class="error">        player: String,</span>
+<span class="lineno"> 514 </span><span class="error">        playerButton: Button,</span>
+<span class="lineno"> 515 </span><span class="error">        nameField: TextField,</span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:610:33</span><span class="message">The function confirmBehaviour(conf: Button, playerButton: Button, name: TextField, color: ComboBox&lt;PlayerColour&gt;, difficulty: ComboBox&lt;PlayerType&gt;, state: String) has too many parameters. The current threshold is set to 6.</span>
+        <pre><code><span class="lineno"> 607 </span>        }
+<span class="lineno"> 608 </span>    }
+<span class="lineno"> 609 </span>
+<span class="lineno"> 610 </span>    private fun confirmBehaviour<span class="error">(</span>
+<span class="lineno"> 611 </span><span class="error">        conf: Button,</span>
+<span class="lineno"> 612 </span><span class="error">        playerButton: Button,</span>
+<span class="lineno"> 613 </span><span class="error">        name: TextField,</span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:680:26</span><span class="message">The function unconfirm(conf: Button, playerButton: Button, name: TextField, color: ComboBox&lt;PlayerColour&gt;, difficulty: ComboBox&lt;PlayerType&gt;, state: String) has too many parameters. The current threshold is set to 6.</span>
+        <pre><code><span class="lineno"> 677 </span>        }
+<span class="lineno"> 678 </span>    }
+<span class="lineno"> 679 </span>
+<span class="lineno"> 680 </span>    private fun unconfirm<span class="error">(</span>
+<span class="lineno"> 681 </span><span class="error">        conf: Button,</span>
+<span class="lineno"> 682 </span><span class="error">        playerButton: Button,</span>
+<span class="lineno"> 683 </span><span class="error">        name: TextField,</span>
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="NestedBlockDepth" open="open">
+    <summary class="rule-container"><span class="rule">NestedBlockDepth: 8 </span><span class="description">Excessive nesting leads to hidden complexity. Prefer extracting code to make it easier to understand.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:112:9</span><span class="message">Function highScore is nested too deeply.</span>
+        <pre><code><span class="lineno"> 109 </span>     * case 2: if [Player] has requested a tip then only his tokens will not be used for the calculation
+<span class="lineno"> 110 </span>     * of average score
+<span class="lineno"> 111 </span>     */
+<span class="lineno"> 112 </span>    fun <span class="error">highScore</span>(game: Game):Pair&lt;String,Double&gt;{
+<span class="lineno"> 113 </span>
+<span class="lineno"> 114 </span>        var scoreAndPlayer: Pair&lt;String,Double&gt; = Pair(&quot;&quot;,0.0)
+<span class="lineno"> 115 </span>        var haveWinner = false
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:182:9</span><span class="message">Function getValidTiles is nested too deeply.</span>
+        <pre><code><span class="lineno"> 179 </span>     * @param state where the calculations take place
+<span class="lineno"> 180 </span>     * @return array of [Tiles] that current [Player] is allowed to peek
+<span class="lineno"> 181 </span>     */
+<span class="lineno"> 182 </span>    fun <span class="error">getValidTiles</span>(state: State): MutableList&lt;Tile&gt; {
+<span class="lineno"> 183 </span>        var meeplePos: Int
+<span class="lineno"> 184 </span>        val validTiles:MutableList&lt;Tile&gt; = mutableListOf()
+<span class="lineno"> 185 </span>        var a = 0
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:356:9</span><span class="message">Function minimax is nested too deeply.</span>
+        <pre><code><span class="lineno"> 353 </span>     * supposed to be maximum for AI player and minimum for human player
+<span class="lineno"> 354 </span>     */
+<span class="lineno"> 355 </span>
+<span class="lineno"> 356 </span>    fun <span class="error">minimax</span>(state: State, depth: Int, alpha:Int ,
+<span class="lineno"> 357 </span>                beta:Int, aiplayer: Boolean ) : Pair&lt;Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;,Int&gt; {
+<span class="lineno"> 358 </span>
+<span class="lineno"> 359 </span>        val getValidTiles: MutableList&lt;Tile&gt; = getValidTiles(state) // die 3 mögliche Tiles
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:253:17</span><span class="message">Function refreshGrid is nested too deeply.</span>
+        <pre><code><span class="lineno"> 250 </span>    }
+<span class="lineno"> 251 </span>
+<span class="lineno"> 252 </span>    //Function to fill a grid with CardViews according to the content of the Players grid from entity
+<span class="lineno"> 253 </span>    private fun <span class="error">refreshGrid</span>(grid: GridPane&lt;CardView&gt;) {
+<span class="lineno"> 254 </span>        val player = playerGridMap.backward(grid)
+<span class="lineno"> 255 </span>
+<span class="lineno"> 256 </span>        for (i in 0..8) {
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:299:17</span><span class="message">Function refreshMoonTiles is nested too deeply.</span>
+        <pre><code><span class="lineno"> 296 </span>    }
+<span class="lineno"> 297 </span>
+<span class="lineno"> 298 </span>    //Refreshes the linearLayouts to reflect the state of the moonWheel
+<span class="lineno"> 299 </span>    private fun <span class="error">refreshMoonTiles</span>() {
+<span class="lineno"> 300 </span>        val currentGame = rootService.novaluna
+<span class="lineno"> 301 </span>        checkNotNull(currentGame) {&quot;Kein novaluna&quot;}
+<span class="lineno"> 302 </span>        val game = currentGame.game
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:416:17</span><span class="message">Function makeMove is nested too deeply.</span>
+        <pre><code><span class="lineno"> 413 </span>    }
+<span class="lineno"> 414 </span>
+<span class="lineno"> 415 </span>    //Fulfills a makeMove cycle
+<span class="lineno"> 416 </span>    private fun <span class="error">makeMove</span>(currentPlayer: Player) {
+<span class="lineno"> 417 </span>        refreshPlayerGridMap()
+<span class="lineno"> 418 </span>        val state = rootService.novaluna.game?.currentState
+<span class="lineno"> 419 </span>        checkNotNull(state)
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:548:9</span><span class="message">Function UndoMove is nested too deeply.</span>
+        <pre><code><span class="lineno"> 545 </span>    }
+<span class="lineno"> 546 </span>
+<span class="lineno"> 547 </span>
+<span class="lineno"> 548 </span>    fun <span class="error">UndoMove</span>() {
+<span class="lineno"> 549 </span>        val currentGame: Game? = rootService.novaluna.game
+<span class="lineno"> 550 </span>        checkNotNull(currentGame)
+<span class="lineno"> 551 </span>        val currentPlayer = currentGame!!.currentState.currentPlayer
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:682:17</span><span class="message">Function addGridAfterLoad is nested too deeply.</span>
+        <pre><code><span class="lineno"> 679 </span>        }
+<span class="lineno"> 680 </span>    }
+<span class="lineno"> 681 </span>
+<span class="lineno"> 682 </span>    private fun <span class="error">addGridAfterLoad</span>(){
+<span class="lineno"> 683 </span>        val currentGame = rootService.novaluna
+<span class="lineno"> 684 </span>        checkNotNull(currentGame)
+<span class="lineno"> 685 </span>        val game = currentGame.game
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="TooManyFunctions" open="open">
+    <summary class="rule-container"><span class="rule">TooManyFunctions: 5 </span><span class="description">Too many functions inside a/an file/class/object/interface always indicate a violation of the single responsibility principle. Maybe the file/class/object/interface wants to manage too many things at once. Extract functionality which clearly belongs together.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/GameService.kt:12:7</span><span class="message">Class 'GameService' with '13' functions detected. Defined threshold inside classes is set to '11'</span>
+        <pre><code><span class="lineno">   9 </span> *
+<span class="lineno">  10 </span> * @property rootService Instance of [RootService] to access the other service layer classes and the entity layer.
+<span class="lineno">  11 </span> */
+<span class="lineno">  12 </span>class <span class="error">GameService</span>(private val rootService: RootService): AbstractRefreshingService() {
+<span class="lineno">  13 </span>
+<span class="lineno">  14 </span>    /**
+<span class="lineno">  15 </span>     * Method to start a standard game (neither the first game, nor a tournament or a simulation game).
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/IOService.kt:23:7</span><span class="message">Class 'IOService' with '11' functions detected. Defined threshold inside classes is set to '11'</span>
+        <pre><code><span class="lineno">  20 </span> *
+<span class="lineno">  21 </span> *
+<span class="lineno">  22 </span> */
+<span class="lineno">  23 </span>class <span class="error">IOService</span>(val rootService: RootService) : AbstractRefreshingService() {
+<span class="lineno">  24 </span>    var CSV_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;)
+<span class="lineno">  25 </span>    var PROTOCOL_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/protocol.csv&quot;)
+<span class="lineno">  26 </span>    var SAVE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/gameSaved.json&quot;)
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/PlayerActionService.kt:10:7</span><span class="message">Class 'PlayerActionService' with '13' functions detected. Defined threshold inside classes is set to '11'</span>
+        <pre><code><span class="lineno">   7 </span> *
+<span class="lineno">   8 </span> * @property rootService Instance of [RootService] to access the other service layer classes and the entity layer.
+<span class="lineno">   9 </span> */
+<span class="lineno">  10 </span>class <span class="error">PlayerActionService</span>(val rootService: RootService): AbstractRefreshingService() {
+<span class="lineno">  11 </span>
+<span class="lineno">  12 </span>
+<span class="lineno">  13 </span>    /**
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:21:7</span><span class="message">Class 'Application' with '28' functions detected. Defined threshold inside classes is set to '11'</span>
+        <pre><code><span class="lineno">  18 </span>/**
+<span class="lineno">  19 </span> * The main class of the view layer, connecting all other scenes.
+<span class="lineno">  20 </span> */
+<span class="lineno">  21 </span>class <span class="error">Application</span> : BoardGameApplication(&quot;Nova Luna&quot;), Refreshable {
+<span class="lineno">  22 </span>
+<span class="lineno">  23 </span>
+<span class="lineno">  24 </span>    val rootService = RootService(Novaluna(mutableListOf(), null))
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:18:7</span><span class="message">Class 'NewGameMenuScene' with '11' functions detected. Defined threshold inside classes is set to '11'</span>
+        <pre><code><span class="lineno">  15 </span>/**
+<span class="lineno">  16 </span> * Scene to adjust game settings. Number of Players, Playernames, AI difficulty, etc.
+<span class="lineno">  17 </span> */
+<span class="lineno">  18 </span>class <span class="error">NewGameMenuScene</span>(private val rootService: RootService) : MenuScene(1920, 1080), Refreshable {
+<span class="lineno">  19 </span>
+<span class="lineno">  20 </span>    private var players = 0
+<span class="lineno">  21 </span>    private var readyPlayersChosen = 0
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <h3>empty-blocks: 1</h3>
+  <details id="EmptyClassBlock" open="open">
+    <summary class="rule-container"><span class="rule">EmptyClassBlock: 1 </span><span class="description">Empty block of code detected. As they serve no purpose they should be removed.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/entity/Novaluna.kt:7:75</span><span class="message">The class or object Novaluna is empty.</span>
+        <pre><code><span class="lineno">   4 </span> * data class to represent a game of NovaLuna
+<span class="lineno">   5 </span> * it is characterized by a list of [highscores] and [game]
+<span class="lineno">   6 </span> */
+<span class="lineno">   7 </span>data class Novaluna (var highscores: MutableList&lt;Score&gt;, var game : Game?)<span class="error">{</span>
+<span class="lineno">   8 </span><span class="error">}</span>
+<span class="lineno">   9 </span>
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <h3>naming: 5</h3>
+  <details id="FunctionNaming" open="open">
+    <summary class="rule-container"><span class="rule">FunctionNaming: 1 </span><span class="description">Function names should follow the naming convention set in the configuration.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:548:9</span><span class="message">Function names should match the pattern: ([a-z][a-zA-Z0-9]*)|(`.*`)</span>
+        <pre><code><span class="lineno"> 545 </span>    }
+<span class="lineno"> 546 </span>
+<span class="lineno"> 547 </span>
+<span class="lineno"> 548 </span>    fun <span class="error">UndoMove</span>() {
+<span class="lineno"> 549 </span>        val currentGame: Game? = rootService.novaluna.game
+<span class="lineno"> 550 </span>        checkNotNull(currentGame)
+<span class="lineno"> 551 </span>        val currentPlayer = currentGame!!.currentState.currentPlayer
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="VariableNaming" open="open">
+    <summary class="rule-container"><span class="rule">VariableNaming: 4 </span><span class="description">Variable names should follow the naming convention set in the projects configuration.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/IOService.kt:24:9</span><span class="message">Variable names should match the pattern: [a-z][A-Za-z0-9]*</span>
+        <pre><code><span class="lineno">  21 </span> *
+<span class="lineno">  22 </span> */
+<span class="lineno">  23 </span>class IOService(val rootService: RootService) : AbstractRefreshingService() {
+<span class="lineno">  24 </span>    var <span class="error">CSV_FILE</span> : File = File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;)
+<span class="lineno">  25 </span>    var PROTOCOL_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/protocol.csv&quot;)
+<span class="lineno">  26 </span>    var SAVE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/gameSaved.json&quot;)
+<span class="lineno">  27 </span>    var HIGHSCORE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/highscoreSaved.json&quot;)
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/IOService.kt:25:9</span><span class="message">Variable names should match the pattern: [a-z][A-Za-z0-9]*</span>
+        <pre><code><span class="lineno">  22 </span> */
+<span class="lineno">  23 </span>class IOService(val rootService: RootService) : AbstractRefreshingService() {
+<span class="lineno">  24 </span>    var CSV_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;)
+<span class="lineno">  25 </span>    var <span class="error">PROTOCOL_FILE</span> : File = File(&quot;src/main/resources/default_CSV_SaveFile/protocol.csv&quot;)
+<span class="lineno">  26 </span>    var SAVE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/gameSaved.json&quot;)
+<span class="lineno">  27 </span>    var HIGHSCORE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/highscoreSaved.json&quot;)
+<span class="lineno">  28 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/IOService.kt:26:9</span><span class="message">Variable names should match the pattern: [a-z][A-Za-z0-9]*</span>
+        <pre><code><span class="lineno">  23 </span>class IOService(val rootService: RootService) : AbstractRefreshingService() {
+<span class="lineno">  24 </span>    var CSV_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;)
+<span class="lineno">  25 </span>    var PROTOCOL_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/protocol.csv&quot;)
+<span class="lineno">  26 </span>    var <span class="error">SAVE_FILE</span> : File = File(&quot;src/main/resources/default_CSV_SaveFile/gameSaved.json&quot;)
+<span class="lineno">  27 </span>    var HIGHSCORE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/highscoreSaved.json&quot;)
+<span class="lineno">  28 </span>
+<span class="lineno">  29 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/IOService.kt:27:9</span><span class="message">Variable names should match the pattern: [a-z][A-Za-z0-9]*</span>
+        <pre><code><span class="lineno">  24 </span>    var CSV_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;)
+<span class="lineno">  25 </span>    var PROTOCOL_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/protocol.csv&quot;)
+<span class="lineno">  26 </span>    var SAVE_FILE : File = File(&quot;src/main/resources/default_CSV_SaveFile/gameSaved.json&quot;)
+<span class="lineno">  27 </span>    var <span class="error">HIGHSCORE_FILE</span> : File = File(&quot;src/main/resources/default_CSV_SaveFile/highscoreSaved.json&quot;)
+<span class="lineno">  28 </span>
+<span class="lineno">  29 </span>
+<span class="lineno">  30 </span>    /**
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <h3>style: 33</h3>
+  <details id="MaxLineLength" open="open">
+    <summary class="rule-container"><span class="rule">MaxLineLength: 25 </span><span class="description">Line detected that is longer than the defined maximum line length in the code style.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:428:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 425 </span>        if (currentPlayer.playerType == PlayerType.HUMAN) {
+<span class="lineno"> 426 </span>            //Restricts access to the first three tiles after the meeple
+<span class="lineno"> 427 </span>            for (i in 0..11) {
+<span class="lineno"> 428 </span>                <span class="error">//Gives the Player the ability to choose a Tile, saves it and removes it from the moonWheel and moves the meeple</span>
+<span class="lineno"> 429 </span>                if (i != meeplePos &amp;&amp; state.moonwheel.tiles[i].id != 0 &amp;&amp;
+<span class="lineno"> 430 </span>                    rootService.playerActionService.tileSelectionAllowed(state.moonwheel.tiles[i], state)
+<span class="lineno"> 431 </span>                ) {
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:463:45</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 460 </span>                                        }
+<span class="lineno"> 461 </span>
+<span class="lineno"> 462 </span>                                        cell.component!!.onMouseClicked = { _ -&gt;
+<span class="lineno"> 463 </span>                                            <span class="error">if</span> (currentPlayer.isEligibleGridPosition(Pair(cell.columnIndex, cell.rowIndex))) {
+<span class="lineno"> 464 </span>                                                isFocused = false
+<span class="lineno"> 465 </span>                                                //On click on a tile the grid restores its size and replaces it with the saved tile
+<span class="lineno"> 466 </span>                                                playerGrid.scale = oldScale
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:465:49</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 462 </span>                                        cell.component!!.onMouseClicked = { _ -&gt;
+<span class="lineno"> 463 </span>                                            if (currentPlayer.isEligibleGridPosition(Pair(cell.columnIndex, cell.rowIndex))) {
+<span class="lineno"> 464 </span>                                                isFocused = false
+<span class="lineno"> 465 </span>                                                <span class="error">//On click on a tile the grid restores its size and replaces it with the saved tile</span>
+<span class="lineno"> 466 </span>                                                playerGrid.scale = oldScale
+<span class="lineno"> 467 </span>                                                playerGrid.posX = oldPosX
+<span class="lineno"> 468 </span>                                                playerGrid.posY = oldPosY
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/Application.kt:647:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 644 </span>        val aufgaben = placement.first.tasks.size.toString()
+<span class="lineno"> 645 </span>        val kosten = placement.first.cost.toString()
+<span class="lineno"> 646 </span>
+<span class="lineno"> 647 </span>        <span class="error">val tipp = &quot;Wähle das $farbe Tile mit $aufgaben Aufgabe(n) und Kosten $kosten und platziere es auf das Feld $spalte$zeile.&quot;</span>
+<span class="lineno"> 648 </span>
+<span class="lineno"> 649 </span>        return tipp
+<span class="lineno"> 650 </span>    }
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:340:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 337 </span>        color: ComboBox&lt;PlayerColour&gt;,
+<span class="lineno"> 338 </span>        difficulty: ComboBox&lt;PlayerType&gt;
+<span class="lineno"> 339 </span>    ) {
+<span class="lineno"> 340 </span>        <span class="error">if</span> (name.text != &quot;&quot; &amp;&amp; color.selectedItem != null &amp;&amp; (difficulty.selectedItem != null &amp;&amp; !difficulty.isDisabled || difficulty.isDisabled)) {
+<span class="lineno"> 341 </span>            var diff = difficulty.selectedItem
+<span class="lineno"> 342 </span>            conf.visual = ImageVisual(&quot;ConfirmButton.png&quot;)
+<span class="lineno"> 343 </span>            conf.text = &quot;BEREIT!&quot;
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:632:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 629 </span>        color: ComboBox&lt;PlayerColour&gt;,
+<span class="lineno"> 630 </span>        difficulty: ComboBox&lt;PlayerType&gt;
+<span class="lineno"> 631 </span>    ) {
+<span class="lineno"> 632 </span>        <span class="error">if</span> (name.text != &quot;&quot; &amp;&amp; color.selectedItem != null &amp;&amp; (difficulty.selectedItem != null &amp;&amp; !difficulty.isDisabled || difficulty.isDisabled)) {
+<span class="lineno"> 633 </span>            var diff = difficulty.selectedItem
+<span class="lineno"> 634 </span>            conf.visual = ImageVisual(&quot;ConfirmButton.png&quot;)
+<span class="lineno"> 635 </span>            conf.text = &quot;BEREIT!&quot;
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/GameServiceTest.kt:244:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 241 </span>
+<span class="lineno"> 242 </span>        val playerTriples = listOf(humanPlayer1Triple, aiPlayer2Triple)
+<span class="lineno"> 243 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno"> 244 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno"> 245 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno"> 246 </span>        testRefreshable.reset()
+<span class="lineno"> 247 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveMoonwheelTest.kt:49:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  46 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno">  47 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno">  48 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno">  49 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno">  50 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno">  51 </span>        testRefreshable.reset()
+<span class="lineno">  52 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveMoonwheelTest.kt:79:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  76 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno">  77 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno">  78 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno">  79 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno">  80 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno">  81 </span>        testRefreshable.reset()
+<span class="lineno">  82 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveMoonwheelTest.kt:140:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 137 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno"> 138 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno"> 139 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno"> 140 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno"> 141 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno"> 142 </span>        testRefreshable.reset()
+<span class="lineno"> 143 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveMoonwheelTest.kt:219:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 216 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno"> 217 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno"> 218 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno"> 219 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno"> 220 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno"> 221 </span>        testRefreshable.reset()
+<span class="lineno"> 222 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveTaskEvaluationTilePlacementTest.kt:34:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  31 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno">  32 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno">  33 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno">  34 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno">  35 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno">  36 </span>        testRefreshable.reset()
+<span class="lineno">  37 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveTaskEvaluationTilePlacementTest.kt:118:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 115 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno"> 116 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno"> 117 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno"> 118 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno"> 119 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno"> 120 </span>        testRefreshable.reset()
+<span class="lineno"> 121 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveTaskEvaluationTilePlacementTest.kt:184:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 181 </span>        assertEquals(currentGame.currentState.currentPlayer.tokens,16)
+<span class="lineno"> 182 </span>
+<span class="lineno"> 183 </span>        // Place a few more tiles and check.
+<span class="lineno"> 184 </span>        <span class="error">rootService.playerActionService.makeMove(currentGame.currentState.moonwheel.tiles[7],Pair(6,5))</span> // No new task completed.
+<span class="lineno"> 185 </span>        assertTrue(testRefreshable.refreshAfterMakeMoveCalled)
+<span class="lineno"> 186 </span>        testRefreshable.reset()
+<span class="lineno"> 187 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveTaskEvaluationTilePlacementTest.kt:192:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 189 </span>
+<span class="lineno"> 190 </span>        assertEquals(currentGame.currentState.currentPlayer.tokens,16)
+<span class="lineno"> 191 </span>        currentGame.currentState.currentPlayer.placeTileOnGrid(tile9,pos9) // This completes the tile at (5,6)
+<span class="lineno"> 192 </span>        <span class="error">rootService.playerActionService.makeMove(currentGame.currentState.moonwheel.tiles[8],Pair(2,4))</span>  // This updates the tokens
+<span class="lineno"> 193 </span>        assertTrue(testRefreshable.refreshAfterMakeMoveCalled)
+<span class="lineno"> 194 </span>        testRefreshable.reset()
+<span class="lineno"> 195 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveTaskEvaluationTilePlacementTest.kt:213:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 210 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno"> 211 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno"> 212 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno"> 213 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno"> 214 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno"> 215 </span>        testRefreshable.reset()
+<span class="lineno"> 216 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/MakeMoveTaskEvaluationTilePlacementTest.kt:282:9</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 279 </span>        // Create a game and get the players. Note that the game is a aiTournament so that the cardorder is controlled.
+<span class="lineno"> 280 </span>        val playerTriples = listOf(humanPlayer1Triple,humanPlayer2Triple,humanPlayer3Triple)
+<span class="lineno"> 281 </span>        assertNull(rootService.novaluna.game)
+<span class="lineno"> 282 </span>        <span class="error">rootService.gameService.startNewAITournamentGame(playerTriples, File(&quot;src/main/resources/default_CSV_SaveFile/nl_tiles.csv&quot;))</span>
+<span class="lineno"> 283 </span>        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
+<span class="lineno"> 284 </span>        testRefreshable.reset()
+<span class="lineno"> 285 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:82:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  79 </span>        // Check for starting position
+<span class="lineno">  80 </span>        for (i in 1 .. 11){
+<span class="lineno">  81 </span>            if(i in 1..3){
+<span class="lineno">  82 </span>                <span class="error">assertTrue { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno">  83 </span>            }else{
+<span class="lineno">  84 </span>                assertFalse { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno">  85 </span>            }
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:84:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  81 </span>            if(i in 1..3){
+<span class="lineno">  82 </span>                assertTrue { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno">  83 </span>            }else{
+<span class="lineno">  84 </span>                <span class="error">assertFalse { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno">  85 </span>            }
+<span class="lineno">  86 </span>        }
+<span class="lineno">  87 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:92:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  89 </span>        moonwheel.tiles[2] = Tile()
+<span class="lineno">  90 </span>        for (i in 1 .. 11){
+<span class="lineno">  91 </span>            if(i in setOf(1,3,4)){
+<span class="lineno">  92 </span>                <span class="error">assertTrue { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno">  93 </span>            }else if(i in setOf(2)){
+<span class="lineno">  94 </span>                assertFails { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno">  95 </span>            }else{
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:94:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  91 </span>            if(i in setOf(1,3,4)){
+<span class="lineno">  92 </span>                assertTrue { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno">  93 </span>            }else if(i in setOf(2)){
+<span class="lineno">  94 </span>                <span class="error">assertFails { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno">  95 </span>            }else{
+<span class="lineno">  96 </span>                assertFalse { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno">  97 </span>            }
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:96:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno">  93 </span>            }else if(i in setOf(2)){
+<span class="lineno">  94 </span>                assertFails { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno">  95 </span>            }else{
+<span class="lineno">  96 </span>                <span class="error">assertFalse { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno">  97 </span>            }
+<span class="lineno">  98 </span>        }
+<span class="lineno">  99 </span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:104:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 101 </span>        moonwheel.tiles[8] = Tile()
+<span class="lineno"> 102 </span>        for (i in 1 .. 11){
+<span class="lineno"> 103 </span>            if(i in setOf(1,3,4)){
+<span class="lineno"> 104 </span>                <span class="error">assertTrue { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno"> 105 </span>            }else if(i in setOf(2,8)){
+<span class="lineno"> 106 </span>                assertFails { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno"> 107 </span>            }else{
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:106:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 103 </span>            if(i in setOf(1,3,4)){
+<span class="lineno"> 104 </span>                assertTrue { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno"> 105 </span>            }else if(i in setOf(2,8)){
+<span class="lineno"> 106 </span>                <span class="error">assertFails { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno"> 107 </span>            }else{
+<span class="lineno"> 108 </span>                assertFalse { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno"> 109 </span>            }
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/test/kotlin/service/TileSelectionAllowedTest.kt:108:17</span><span class="message">Line detected that is longer than the defined maximum line length in the code style.</span>
+        <pre><code><span class="lineno"> 105 </span>            }else if(i in setOf(2,8)){
+<span class="lineno"> 106 </span>                assertFails { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }
+<span class="lineno"> 107 </span>            }else{
+<span class="lineno"> 108 </span>                <span class="error">assertFalse { rootService.playerActionService.tileSelectionAllowed(moonwheel.tiles[i],currentGame.currentState) }</span>
+<span class="lineno"> 109 </span>            }
+<span class="lineno"> 110 </span>        }
+<span class="lineno"> 111 </span>    }
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="ReturnCount" open="open">
+    <summary class="rule-container"><span class="rule">ReturnCount: 5 </span><span class="description">Restrict the number of return statements in methods.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:26:9</span><span class="message">Function aiMove has 4 return statements which exceeds the limit of 2.</span>
+        <pre><code><span class="lineno">  23 </span>     * case 2: [PlayerType.NORMAL] minimax algorithm will be executed with depth 6
+<span class="lineno">  24 </span>     * case 3: [PlayerType.HARD] minimax algorithm will be executed with depth 10
+<span class="lineno">  25 </span>     */
+<span class="lineno">  26 </span>    fun <span class="error">aiMove</span>(state: State, difficulty:PlayerType ) : Pair&lt;Tile, Pair&lt;Int,Int&gt;&gt;{
+<span class="lineno">  27 </span>
+<span class="lineno">  28 </span>
+<span class="lineno">  29 </span>        if (difficulty== PlayerType.HARD){
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/service/AIService.kt:74:9</span><span class="message">Function isTerminal has 3 return statements which exceeds the limit of 2.</span>
+        <pre><code><span class="lineno">  71 </span>     * otherwise output will be false
+<span class="lineno">  72 </span>     */
+<span class="lineno">  73 </span>
+<span class="lineno">  74 </span>    fun <span class="error">isTerminal</span>(state: State): Boolean {
+<span class="lineno">  75 </span>
+<span class="lineno">  76 </span>        // var emptyMoonwheel : Boolean = false
+<span class="lineno">  77 </span>        var meepelPosition  = 0
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:793:9</span><span class="message">Function checkNames has 4 return statements which exceeds the limit of 2.</span>
+        <pre><code><span class="lineno"> 790 </span>
+<span class="lineno"> 791 </span>    }
+<span class="lineno"> 792 </span>
+<span class="lineno"> 793 </span>    fun <span class="error">checkNames</span>() : Boolean
+<span class="lineno"> 794 </span>    {
+<span class="lineno"> 795 </span>        if (players==2)
+<span class="lineno"> 796 </span>        {
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:831:9</span><span class="message">Function orderofColor has 4 return statements which exceeds the limit of 2.</span>
+        <pre><code><span class="lineno"> 828 </span>        return false
+<span class="lineno"> 829 </span>    }
+<span class="lineno"> 830 </span>
+<span class="lineno"> 831 </span>    fun <span class="error">orderofColor</span>() : Boolean {
+<span class="lineno"> 832 </span>        if (players == 2) {
+<span class="lineno"> 833 </span>            if (player1Color.selectedItem?.equals(player2Color.selectedItem) == true) {
+<span class="lineno"> 834 </span>                return true
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewGameMenuScene.kt:864:9</span><span class="message">Function checkDifficulty has 4 return statements which exceeds the limit of 2.</span>
+        <pre><code><span class="lineno"> 861 </span>        return false
+<span class="lineno"> 862 </span>    }
+<span class="lineno"> 863 </span>
+<span class="lineno"> 864 </span>    fun <span class="error">checkDifficulty</span>() : Boolean
+<span class="lineno"> 865 </span>    {
+<span class="lineno"> 866 </span>        if (players==2)
+<span class="lineno"> 867 </span>        {
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="UnusedPrivateMember" open="open">
+    <summary class="rule-container"><span class="rule">UnusedPrivateMember: 3 </span><span class="description">Private member is unused.</span></summary>
+    <ul>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/GameFinishedMenuScene.kt:18:29</span><span class="message">Private property rootService is unused.</span>
+        <pre><code><span class="lineno">  15 </span>/**
+<span class="lineno">  16 </span> * Class to represent the MenueScene after the game ended.
+<span class="lineno">  17 </span> */
+<span class="lineno">  18 </span>class GameFinishedMenuScene(<span class="error">private val rootService: RootService</span>) : MenuScene(900,900), Refreshable {
+<span class="lineno">  19 </span>    private val headlineLabel = Label(
+<span class="lineno">  20 </span>        width = 300, height = 25, posX = 300, posY = 50,
+<span class="lineno">  21 </span>        text = &quot;Spiel beendet!&quot;,
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/GameFinishedMenuScene.kt:208:5</span><span class="message">Private function gameResultString is unused.</span>
+        <pre><code><span class="lineno"> 205 </span>        )
+<span class="lineno"> 206 </span>    }
+<span class="lineno"> 207 </span>
+<span class="lineno"> 208 </span>    <span class="error">private fun State.gameResultString(): String {</span>
+<span class="lineno"> 209 </span><span class="error">        val p1Score = players.first().tokens</span>
+<span class="lineno"> 210 </span><span class="error">        val p2Score = players.component2().tokens</span>
+<span class="lineno"> 211 </span><span class="error">        var p3Score= 0</span>
+</code></pre>
+      </li>
+      <li><span class="location">C:/Uni/WS21_22/Sopra/Projekt2/src/main/kotlin/view/NewAITournamentScene.kt:17:28</span><span class="message">Private property rootService is unused.</span>
+        <pre><code><span class="lineno">  14 </span>import tools.aqua.bgw.visual.ImageVisual
+<span class="lineno">  15 </span>import java.awt.Color
+<span class="lineno">  16 </span>
+<span class="lineno">  17 </span>class NewAITournamentScene(<span class="error">private val rootService: RootService</span>) : MenuScene(1920, 1080), Refreshable {
+<span class="lineno">  18 </span> var playerList = mutableListOf&lt;Triple&lt;String, PlayerColour, PlayerType&gt;&gt;()
+<span class="lineno">  19 </span>    private var players=0
+<span class="lineno">  20 </span>    private var aiPlayerState =&quot;aiplayer&quot;
+</code></pre>
+      </li>
+    </ul>
+  </details>
+</div>
+
+
+generated with <a href="https://detekt.github.io/">detekt version 1.18.0-RC3</a> on 2022-02-02 07:39:21 UTC.
+
+</body>
+</html>

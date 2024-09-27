@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Moonwheel.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">projekt2</a> &gt; <a href="index.source.html" class="el_package">entity</a> &gt; <span class="el_source">Moonwheel.kt</span></div><h1>Moonwheel.kt</h1><pre class="source lang-java linenums">package entity
+
+import kotlinx.serialization.Serializable
+import tools.aqua.bgw.util.Stack
+
+/**
+ * class to represent the moonwheel itself
+ * characterized by the [playerPositions] of the players in the game and
+ * the [tiles] which a lying around the wheel including the meeple
+ *
+ * Class to represent the Moonwheel.
+ *
+ * Note that the length of both arrays is important in the context of the game:
+ * The array tile has to be of length 12, corresponding to the number of tiles placed around the moonwheel.
+ * The array playerPositions has to be of length 24, corresponding to the number of playerPositions of the moonwheel.
+ *
+ * Note also that empty positions in the array tiles are marked by Type.EMPTY-Tiles, not by null.
+ *
+ * @param tiles Array containing the tiles around the Moonwheel.
+ * @param playerPositions Array representing the playerPositions.
+ */
+<span class="pc bpc" id="L22" title="4 of 12 branches missed.">@Serializable</span>
+<span class="fc" id="L23">data class Moonwheel (</span>
+<span class="pc bpc" id="L24" title="2 of 8 branches missed.">    val tiles : Array&lt;Tile&gt; = Array(12){Tile()},</span>
+<span class="pc bpc" id="L25" title="2 of 8 branches missed.">    val playerPositions : Array&lt;MutableList&lt;Player&gt;&gt; = Array(24){</span>
+<span class="fc" id="L26">        mutableListOf&lt;Player&gt;()</span>
+    }) {
+
+
+    /**
+     * function to clone,
+     */
+     /*fun clone(): Moonwheel{
+
+        val clonedPlayerPositions = playerPositions
+        var tmp : MutableList&lt;Player&gt;
+        val clonedTile = tiles
+
+        for (i in 0..clonedPlayerPositions.size-1) {
+
+            tmp   = clonedPlayerPositions[i].popAll() as MutableList&lt;Player&gt;
+            for (j in 0..tmp.size-1) {
+                tmp[j] = tmp[j].clone()
+            }
+            clonedPlayerPositions[i].pushAll(tmp)
+        }
+
+        var tmpTiles : MutableList&lt;Tile&gt; = mutableListOf() //emptyList&lt;Tile&gt;() as MutableList&lt;Tile&gt;
+        for (i in 0..tiles.size-1){
+
+            tmpTiles.add(clonedTile[i].clone())
+
+        }
+        return Moonwheel(clonedPlayerPositions, tmpTiles)
+    }*/
+    /**
+     * Method to create a deep clone of the moonwheel.
+     *
+     * @return The deep clone of the moonwheel.
+     */
+    fun clone(): Moonwheel{
+        // Create an array with empty tiles, which is later filled with the cloned tiles.
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        val clonedTiles = Array&lt;Tile&gt;(12){</span>
+<span class="fc" id="L64">            Tile()</span>
+        }
+
+        // Fill the array clonedTiles with the cloned tiles from tiles
+<span class="fc" id="L68">        tiles.forEachIndexed { index, tile -&gt;</span>
+<span class="fc" id="L69">            clonedTiles[index] = tile.clone()</span>
+<span class="fc" id="L70">        }</span>
+
+        // Create an array of empty mutable lists, which is later filled with the players.
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        val clonedPlayerPositions = Array&lt;MutableList&lt;Player&gt;&gt;(24){</span>
+<span class="fc" id="L74">            mutableListOf&lt;Player&gt;()</span>
+        }
+
+        // Clone every list in playerPositions and insert them in clonedPlayerPositions
+<span class="fc" id="L78">        playerPositions.forEachIndexed { index, playerList -&gt;</span>
+<span class="fc" id="L79">            playerList.forEach {</span>
+<span class="fc" id="L80">                clonedPlayerPositions[index].add(it.clone())</span>
+<span class="fc" id="L81">            }</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">        return Moonwheel(clonedTiles,clonedPlayerPositions)</span>
+    }
+
+    /**
+     * vergleicht ob tiles auf dem moonwheel identisch sind.
+     */
+    override fun equals(other: Any?): Boolean {
+<span class="fc" id="L90">        val otherWheel : Moonwheel = other as Moonwheel</span>
+<span class="pc bpc" id="L91" title="1 of 4 branches missed.">        for(i in this.playerPositions.indices){</span>
+<span class="fc" id="L92">            var players = playerPositions[i]</span>
+<span class="fc" id="L93">            var otherPlayers = otherWheel.playerPositions[i]</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            if(players.size != otherPlayers.size) return false</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            var equalPlayers = players.zip(otherPlayers).all{ (x,y) -&gt; x == y}</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            if(!equalPlayers) return false</span>
+      }
+<span class="fc" id="L98">      return this.tiles.contentEquals(otherWheel.tiles)</span>
+    }
+
+    override fun hashCode(): Int {
+<span class="fc" id="L102">        var result = tiles.contentHashCode()</span>
+<span class="fc" id="L103">        result = 31 * result + playerPositions.contentHashCode()</span>
+<span class="fc" id="L104">        return result</span>
+    }
+
+<span class="fc" id="L107">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="entity.StateTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-02-02T08:20:51" hostname="DESKTOP-4AHVI7A" time="0.038">
+  <properties/>
+  <testcase name="testClone()" classname="entity.StateTest" time="0.003"/>
+  <testcase name="testGetAndSetCurrentPlayer()" classname="entity.StateTest" time="0.005"/>
+  <testcase name="testGetAndSetMoonwheel()" classname="entity.StateTest" time="0.003"/>
+  <testcase name="testGetAndSetStack()" classname="entity.StateTest" time="0.003"/>
+  <testcase name="testGetAndSetPlayers()" classname="entity.StateTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
